@@ -3,887 +3,811 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>oHenx Premium v1 | Game Portal</title>
+    <title>Profesyonel Okey & 101 Okey Salonu</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
-
-        :root {
-            --primary: #ed1c24;
-            --bg-dark: #050505;
-            --glass: rgba(15, 15, 15, 0.8);
-        }
-
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-dark);
-            color: #e0e0e0;
-            overflow-x: hidden;
-        }
-
-        .glass-header {
-            background: var(--glass);
-            backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .search-dropdown {
-            background: rgba(20, 20, 20, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            max-height: 350px;
-            overflow-y: auto;
-            display: none;
-        }
-
-        .game-card {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(255, 255, 255, 0.03);
-        }
-
-        .game-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            border-color: var(--primary);
-            box-shadow: 0 15px 40px rgba(237, 28, 36, 0.2);
-        }
-
-        .category-pill {
-            transition: all 0.3s ease;
-            white-space: nowrap;
-        }
-
-        .category-pill:hover, .category-pill.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-            box-shadow: 0 0 15px rgba(237, 28, 36, 0.4);
-        }
-
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: #000;
-        }
-
-        .recommendation-slider {
-            display: flex;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            gap: 1.5rem;
-            padding-bottom: 1rem;
-            scrollbar-width: none; /* Firefox */
+            font-family: 'Montserrat', sans-serif;
+            background-color: #0d131a;
+            user-select: none;
+            overflow: hidden;
         }
         
-        .recommendation-slider::-webkit-scrollbar { display: none; /* Chrome */ }
-
-        .slider-item {
-            flex: 0 0 320px;
-            scroll-snap-align: start;
+        .felt-table {
+            background: radial-gradient(circle, #1e5a2d 0%, #0d3818 70%, #051d0b 100%);
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.8);
+            border: 16px solid #3d2314;
+            border-radius: 24px;
         }
 
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0a0a0a; }
-        ::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+        .wood-border {
+            background: linear-gradient(135deg, #4a2810 0%, #291406 50%, #4a2810 100%);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.8), 0 20px 40px rgba(0,0,0,0.6);
+        }
 
-        .game-grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 1.5rem;
+        /* 3D Tile Styling */
+        .okey-tile {
+            width: 42px;
+            height: 58px;
+            background: linear-gradient(145deg, #fffdf8 0%, #ede6d1 100%);
+            border-radius: 6px;
+            border-bottom: 4px solid #b89868;
+            box-shadow: 2px 4px 8px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 20px;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            position: relative;
+        }
+
+        .okey-tile:hover {
+            transform: translateY(-6px) scale(1.05);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.5);
+            z-index: 20;
+        }
+
+        .okey-tile.selected {
+            transform: translateY(-12px);
+            border: 2px solid #3b82f6;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.8);
+            z-index: 30;
+        }
+
+        .okey-tile.okey-indicator-glow {
+            box-shadow: 0 0 15px #f59e0b, 0 0 5px #f59e0b inset;
+            border: 2px solid #f59e0b;
+        }
+
+        .tile-kirmizi { color: #dc2626; }
+        .tile-siyah { color: #1e293b; }
+        .tile-mavi { color: #2563eb; }
+        .tile-sari { color: #d97706; }
+        .tile-sahte { color: #7c3aed; }
+
+        /* Istaka Rack Styling */
+        .istaka-rack {
+            background: linear-gradient(180deg, #61381c 0%, #3d210e 100%);
+            border-radius: 12px;
+            border: 2px solid #8c5229;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.7), inset 0 2px 4px rgba(255,255,255,0.2);
+        }
+
+        .istaka-slot {
+            background: rgba(0,0,0,0.3);
+            border-radius: 4px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.6);
+        }
+
+        /* Modal Blur */
+        .modal-blur {
+            backdrop-filter: blur(8px);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.2);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.2);
+            border-radius: 3px;
         }
     </style>
 </head>
-<body class="min-h-screen">
+<body class="h-screen w-screen flex flex-col justify-between p-2 select-none">
 
-    <!-- Üst Menü & Arama -->
-    <nav class="glass-header">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between gap-6">
-            <!-- Logo -->
-            <div class="flex items-center gap-3 cursor-pointer shrink-0" onclick="showDashboard()">
-                <div class="w-10 h-10 bg-red-600 rounded flex items-center justify-center shadow-lg">
-                    <i class="fas fa-gamepad text-white"></i>
-                </div>
-                <div class="hidden sm:block">
-                    <h1 class="text-lg font-black tracking-widest uppercase leading-none">
-                        oHenx <span class="text-red-600">Premium</span>
-                    </h1>
-                </div>
+    <!-- LOBBY / ROOM SETUP MODAL -->
+    <div id="lobbyModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 modal-blur p-4">
+        <div class="bg-gray-900 border border-gray-700 w-full max-w-xl rounded-2xl p-6 shadow-2xl text-white relative">
+            <div class="text-center mb-6">
+                <h1 class="font-['Cinzel'] text-4xl font-bold text-amber-500 tracking-wider mb-1"><i class="fa-solid fa-layer-group mr-2"></i>VIP OKEY & 101</h1>
+                <p class="text-gray-400 text-sm">Arkadaşlarınla veya Yapay Zekaya Karşı Oyna</p>
             </div>
 
-            <!-- Akıllı Arama Paneli -->
-            <div class="relative flex-1 max-w-md">
-                <div class="relative group">
-                    <input type="text" id="game-search" 
-                           placeholder="Oyun ara... (örn: M, P, R)" 
-                           class="w-full bg-white/5 border border-white/10 rounded-full py-2.5 px-5 pl-12 focus:outline-none focus:border-red-600 focus:bg-white/10 transition-all text-sm font-medium"
-                           onkeyup="handleSearch(this.value)">
-                    <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-red-600 transition-colors"></i>
-                </div>
-                <!-- Dropdown Sonuçları -->
-                <div id="search-results" class="search-dropdown absolute top-full left-0 right-0 mt-3 rounded-2xl z-[110] shadow-2xl">
-                    <!-- JS ile dolacak -->
-                </div>
+            <!-- Tab Buttons -->
+            <div class="flex bg-gray-800 p-1 rounded-xl mb-6">
+                <button id="tabCreateBtn" onclick="switchLobbyTab('create')" class="flex-1 py-2.5 rounded-lg text-sm font-bold bg-amber-600 text-white transition">Oda Kur</button>
+                <button id="tabJoinBtn" onclick="switchLobbyTab('join')" class="flex-1 py-2.5 rounded-lg text-sm font-bold text-gray-400 hover:text-white transition">Odaya Katıl</button>
             </div>
 
-            <!-- Sağ İkonlar -->
-            <div class="flex items-center gap-4 shrink-0">
-                <button onclick="toggleMute()" id="mute-btn" class="w-10 h-10 hover:bg-white/5 rounded-full transition-all text-gray-400 flex items-center justify-center">
-                    <i id="mute-icon" class="fas fa-volume-up"></i>
-                </button>
-                <div class="w-px h-6 bg-white/10 mx-1"></div>
-                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-red-600 to-red-400 flex items-center justify-center font-bold text-white shadow-lg cursor-pointer">
-                    OH
-                </div>
-            </div>
-        </div>
-
-        <!-- Dinamik Kategoriler -->
-        <div id="category-container" class="max-w-7xl mx-auto px-6 pb-4 pt-2 flex items-center gap-3 overflow-x-auto no-scrollbar">
-            <!-- Kategori hapları otomatik yüklenecek -->
-        </div>
-    </nav>
-
-    <main class="max-w-7xl mx-auto px-6 py-10">
-        
-        <!-- DASHBOARD (ANA MENÜ) -->
-        <div id="dashboard">
-            
-            <!-- ÖNERİLENLER SLIDER (Rastgele Seçim) -->
-            <section class="mb-16">
-                <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-xl font-black uppercase tracking-widest flex items-center gap-3 text-white">
-                        <span class="w-2 h-8 bg-red-600 block rounded-full"></span>
-                        Günün Önerileri
-                    </h3>
-                    <div class="flex gap-2">
-                        <button onclick="scrollSlider(-1)" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors"><i class="fas fa-chevron-left text-xs"></i></button>
-                        <button onclick="scrollSlider(1)" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors"><i class="fas fa-chevron-right text-xs"></i></button>
+            <!-- Create Room Section -->
+            <div id="createRoomSection" class="space-y-5">
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Oyun Modu</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="gameMode" value="klasik" checked class="peer hidden">
+                            <div class="p-3 border border-gray-700 rounded-xl bg-gray-800/60 peer-checked:border-amber-500 peer-checked:bg-amber-500/10 text-center transition">
+                                <div class="font-bold text-amber-400">Klasik Okey</div>
+                                <div class="text-xs text-gray-400 mt-0.5">Klasik 14 Taş Bitişli</div>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="gameMode" value="101" class="peer hidden">
+                            <div class="p-3 border border-gray-700 rounded-xl bg-gray-800/60 peer-checked:border-amber-500 peer-checked:bg-amber-500/10 text-center transition">
+                                <div class="font-bold text-amber-400">101 Yüzbir Okey</div>
+                                <div class="text-xs text-gray-400 mt-0.5">Barajlı & Çift Açmalı</div>
+                            </div>
+                        </label>
                     </div>
                 </div>
-                <div id="recommendation-slider" class="recommendation-slider">
-                    <!-- JS ile rastgele oyunlar dolacak -->
-                </div>
-            </section>
 
-            <!-- TÜM OYUNLAR KÜTÜPHANESİ -->
-            <section>
-                <div class="mb-8 flex items-center justify-between">
-                    <h3 class="text-xl font-black uppercase tracking-widest flex items-center gap-3 text-white">
-                        <span class="w-2 h-8 bg-zinc-800 block rounded-full"></span>
-                        Oyun Kütüphanesi
-                    </h3>
-                    <span id="library-count" class="text-xs font-bold text-zinc-500 uppercase">...</span>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Oyuncu Türü</label>
+                    <select id="playerFillType" class="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-sm focus:outline-none focus:border-amber-500">
+                        <option value="bots">Tek Oyunculu (3 Akıllı Bot Botlar ile)</option>
+                        <option value="pass_play">Yerel Çok Oyunculu (Aynı Ekrandan Paslaşarak)</option>
+                    </select>
                 </div>
-                <div id="game-grid" class="game-grid-container">
-                    <!-- JS ile tüm oyunlar dolacak -->
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Oyuncu Adınız</label>
+                    <input type="text" id="playerNameInput" value="Oyuncu 1" class="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" placeholder="İsminizi girin">
                 </div>
-            </section>
+
+                <button onclick="startGameFromLobby()" class="w-full py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 rounded-xl font-bold text-lg shadow-lg transform transition active:scale-95 text-gray-950">
+                    Masayı Kur ve Başla <i class="fa-solid fa-play ml-2"></i>
+                </button>
+            </div>
+
+            <!-- Join Room Section -->
+            <div id="joinRoomSection" class="space-y-5 hidden">
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Oda Kodu</label>
+                    <input type="text" id="roomCodeInput" placeholder="Örn: OKY-8492" class="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-sm uppercase tracking-wider text-center font-mono focus:outline-none focus:border-amber-500">
+                </div>
+                <button onclick="joinRoomAction()" class="w-full py-4 bg-blue-600 hover:bg-blue-700 rounded-xl font-bold text-lg shadow-lg transform transition active:scale-95 text-white">
+                    Odaya Katıl <i class="fa-solid fa-right-to-bracket ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER BAR -->
+    <header class="w-full bg-gray-900/80 border border-gray-800 rounded-xl px-4 py-2 flex items-center justify-between text-white shadow-xl backdrop-blur-md">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-amber-500/20 border border-amber-500/40 rounded-lg flex items-center justify-center text-amber-400 font-bold">
+                <i class="fa-solid fa-gem text-lg"></i>
+            </div>
+            <div>
+                <div class="flex items-center space-x-2">
+                    <span id="displayGameMode" class="font-bold text-amber-400 text-sm uppercase tracking-wider">KLASİK OKEY</span>
+                    <span id="roomCodeBadge" class="bg-gray-800 text-xs px-2 py-0.5 rounded border border-gray-700 text-gray-300 font-mono">ODA: #LOCAL</span>
+                </div>
+                <div class="text-xs text-gray-400" id="turnStatusText">Sıra sizde</div>
+            </div>
         </div>
 
-        <!-- OYUN OYNAMA ALANI (TAM EKRAN ODAĞI) -->
-        <div id="game-view" class="hidden">
-            <div class="flex items-center justify-between mb-6">
-                <div class="flex items-center gap-4">
-                    <button onclick="showDashboard()" class="w-12 h-12 flex items-center justify-center rounded-full bg-white/5 border border-white/10 hover:bg-red-600 transition-all text-white shadow-lg">
-                        <i class="fas fa-arrow-left"></i>
-                    </button>
-                    <div>
-                        <h2 id="active-game-title" class="text-2xl font-black text-white uppercase tracking-widest leading-none">...</h2>
-                        <div class="flex items-center gap-2 mt-2">
-                            <span id="active-game-cat" class="bg-red-600/20 text-red-500 px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-widest block">KATEGORİ</span>
-                            <span id="active-game-id" class="text-[10px] text-zinc-500 font-mono"></span>
+        <div class="flex items-center space-x-3">
+            <!-- 101 Score Display if active -->
+            <div id="score101Badge" class="hidden bg-gray-800/90 border border-amber-500/30 px-3 py-1 rounded-lg text-xs font-semibold text-amber-300">
+                Açılan Toplam Seri: <span id="openedScoreVal" class="font-bold text-emerald-400 text-sm">0</span> / 101
+            </div>
+
+            <button onclick="toggleScoreboard()" class="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 rounded-lg text-xs font-semibold border border-gray-700 transition flex items-center">
+                <i class="fa-solid fa-list-ol mr-1.5 text-amber-400"></i> Yazboz
+            </button>
+            <button onclick="openLobby()" class="px-3 py-1.5 bg-red-900/60 hover:bg-red-800/60 text-red-200 rounded-lg text-xs font-semibold border border-red-700/50 transition">
+                <i class="fa-solid fa-door-open mr-1.5"></i> Çık
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN TABLE AREA -->
+    <main class="flex-1 my-2 relative wood-border rounded-2xl overflow-hidden p-3 flex flex-col justify-between">
+        <div class="felt-table absolute inset-0"></div>
+
+        <!-- TOP PLAYER (BOT 2) -->
+        <div class="relative z-10 flex flex-col items-center">
+            <div id="playerTopBox" class="bg-gray-900/80 border border-gray-700 rounded-xl px-4 py-1.5 text-center text-white shadow-lg flex items-center space-x-3">
+                <div class="relative">
+                    <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center font-bold text-xs">P3</div>
+                    <div id="indicatorP3" class="hidden absolute -bottom-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-gray-900"></div>
+                </div>
+                <div class="text-left">
+                    <div class="text-xs font-bold" id="nameP3">Ahmet (Bot)</div>
+                    <div class="text-[10px] text-gray-400" id="statusP3">Taş Sayısı: 14</div>
+                </div>
+            </div>
+            <!-- Top Discard Pile -->
+            <div class="mt-2 h-14 w-12 border-2 border-dashed border-white/20 rounded-lg flex items-center justify-center" id="discardP3"></div>
+        </div>
+
+        <!-- MIDDLE SECTION (LEFT PLAYER, CENTER DECK/INDICATOR, RIGHT PLAYER) -->
+        <div class="relative z-10 flex justify-between items-center px-4">
+            <!-- LEFT PLAYER (BOT 1) -->
+            <div class="flex items-center space-x-3">
+                <div id="playerLeftBox" class="bg-gray-900/80 border border-gray-700 rounded-xl p-2 text-center text-white shadow-lg flex flex-col items-center">
+                    <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center font-bold text-xs mb-1">P2</div>
+                    <div class="text-xs font-bold" id="nameP2">Ayşe (Bot)</div>
+                    <div class="text-[10px] text-gray-400" id="statusP2">14 Taş</div>
+                </div>
+                <!-- Left Discard Pile -->
+                <div class="h-14 w-12 border-2 border-dashed border-white/20 rounded-lg flex items-center justify-center" id="discardP2"></div>
+            </div>
+
+            <!-- CENTER TABLE DECK & INDICATOR -->
+            <div class="flex items-center space-x-6 bg-black/30 p-4 rounded-2xl border border-white/10 backdrop-blur-sm">
+                <!-- DRAW DECK -->
+                <div onclick="userDrawTile('deck')" class="flex flex-col items-center cursor-pointer group">
+                    <div class="relative">
+                        <div class="w-12 h-16 bg-amber-100 rounded-lg border-b-4 border-amber-800 shadow-xl flex items-center justify-center font-bold text-amber-900 group-hover:scale-105 transition transform">
+                            <i class="fa-solid fa-layer-group text-xl opacity-40"></i>
+                        </div>
+                        <span id="deckCountBadge" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-extrabold px-1.5 py-0.5 rounded-full shadow">84</span>
+                    </div>
+                    <span class="text-[10px] font-bold text-amber-200/80 mt-1 uppercase tracking-wider">Taş Çek</span>
+                </div>
+
+                <!-- INDICATOR TILE & OKEY DISPLAY -->
+                <div class="flex flex-col items-center">
+                    <div class="flex items-center space-x-2">
+                        <!-- Gösterge -->
+                        <div class="text-center">
+                            <div class="text-[9px] text-gray-300 font-bold uppercase mb-0.5">Gösterge</div>
+                            <div id="indicatorTileSlot"></div>
+                        </div>
+                        <!-- Okey -->
+                        <div class="text-center">
+                            <div class="text-[9px] text-amber-400 font-bold uppercase mb-0.5">Okey Taş</div>
+                            <div id="okeyTileSlot"></div>
                         </div>
                     </div>
                 </div>
-                <div class="flex gap-3">
-                    <button onclick="reloadActiveGame()" class="w-12 h-12 flex items-center justify-center bg-white/5 border border-white/10 hover:bg-white/10 rounded-full text-white transition-all shadow-lg" title="Oyunu Yenile">
-                        <i class="fas fa-sync"></i>
-                    </button>
-                    <button onclick="toggleFullscreen()" class="w-12 h-12 flex items-center justify-center bg-white/5 border border-white/10 hover:bg-white/10 rounded-full text-white transition-all shadow-lg" title="Tam Ekran">
-                        <i class="fas fa-expand"></i>
-                    </button>
-                </div>
             </div>
-            
-            <div class="aspect-[16/9] md:aspect-[21/9] w-full bg-black rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] border border-white/10 relative">
-                <div id="iframe-target" class="w-full h-full"></div>
+
+            <!-- RIGHT PLAYER (BOT 3) -->
+            <div class="flex items-center space-x-3">
+                <!-- Right Discard Pile -->
+                <div class="h-14 w-12 border-2 border-dashed border-white/20 rounded-lg flex items-center justify-center" id="discardP4"></div>
+                <div id="playerRightBox" class="bg-gray-900/80 border border-gray-700 rounded-xl p-2 text-center text-white shadow-lg flex flex-col items-center">
+                    <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center font-bold text-xs mb-1">P4</div>
+                    <div class="text-xs font-bold" id="nameP4">Mehmet (Bot)</div>
+                    <div class="text-[10px] text-gray-400" id="statusP4">14 Taş</div>
+                </div>
             </div>
         </div>
 
+        <!-- BOTTOM SECTION (CURRENT USER / DISCARD RACK) -->
+        <div class="relative z-10 flex flex-col items-center">
+            <!-- User's Discard Zone -->
+            <div class="mb-2 flex items-center space-x-4">
+                <div class="text-xs text-amber-300/80 font-semibold">Atılan Taşlar:</div>
+                <div id="discardP1" class="h-14 w-12 border-2 border-dashed border-white/30 rounded-lg flex items-center justify-center bg-black/20"></div>
+                <button onclick="userDrawTile('discard')" id="takeDiscardBtn" class="hidden px-3 py-1 bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold text-xs rounded-lg shadow-md transition">
+                    Soldan Taş Al <i class="fa-solid fa-hand-holding mr-1"></i>
+                </button>
+            </div>
+
+            <!-- RACK (ISTAKA) CONTROLS & RACK CONTAINER -->
+            <div class="w-full max-w-5xl">
+                <!-- Rack Action Buttons -->
+                <div class="flex items-center justify-between mb-2 px-2">
+                    <div class="flex items-center space-x-2">
+                        <button onclick="sortRack('color')" class="px-2.5 py-1 bg-gray-800 hover:bg-gray-700 text-white text-xs rounded-md border border-gray-700 transition">
+                            <i class="fa-solid fa-palette text-amber-400 mr-1"></i> Renge Göre Diz
+                        </button>
+                        <button onclick="sortRack('number')" class="px-2.5 py-1 bg-gray-800 hover:bg-gray-700 text-white text-xs rounded-md border border-gray-700 transition">
+                            <i class="fa-solid fa-arrow-down-1-9 text-amber-400 mr-1"></i> Sayıya Göre Diz
+                        </button>
+                        <button onclick="autoSortPairs()" class="px-2.5 py-1 bg-gray-800 hover:bg-gray-700 text-white text-xs rounded-md border border-gray-700 transition">
+                            <i class="fa-solid fa-border-all text-amber-400 mr-1"></i> Perleri Diz
+                        </button>
+                    </div>
+
+                    <div class="flex items-center space-x-2">
+                        <button id="openHand101Btn" onclick="openHand101()" class="hidden px-3 py-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-md shadow transition">
+                            <i class="fa-solid fa-folder-open mr-1"></i> Elini Aç (101)
+                        </button>
+                        <button onclick="finishHandAction()" class="px-3 py-1 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-bold text-xs rounded-md shadow transition">
+                            <i class="fa-solid fa-flag-checkered mr-1"></i> Eli Bitir / Okey At
+                        </button>
+                    </div>
+                </div>
+
+                <!-- PHYSICAL ISTAKA RACK (2 ROWS) -->
+                <div class="istaka-rack p-3 shadow-2xl relative">
+                    <!-- Top Slot Row -->
+                    <div id="rackRow1" class="flex justify-between items-center mb-2 gap-1 min-h-[62px]"></div>
+                    <!-- Bottom Slot Row -->
+                    <div id="rackRow2" class="flex justify-between items-center gap-1 min-h-[62px]"></div>
+                </div>
+            </div>
+        </div>
     </main>
 
-    <!-- Alt Bilgi -->
-    <footer class="max-w-7xl mx-auto px-6 py-12 border-t border-white/5 text-center mt-20">
-        <p class="text-zinc-600 text-[10px] font-bold uppercase tracking-[0.3em]">oHenx Premium v1 &copy; 2026 - Tüm Hakları Saklıdır</p>
-    </footer>
+    <!-- SCOREBOARD MODAL -->
+    <div id="scoreModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 modal-blur hidden p-4">
+        <div class="bg-gray-900 border border-gray-700 w-full max-w-lg rounded-2xl p-6 text-white shadow-2xl">
+            <div class="flex justify-between items-center mb-4 border-b border-gray-800 pb-3">
+                <h3 class="font-bold text-amber-400 text-lg"><i class="fa-solid fa-table mr-2"></i>Puan Tablosu (Yazboz)</h3>
+                <button onclick="toggleScoreboard()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left text-gray-300">
+                    <thead class="text-xs uppercase bg-gray-800 text-amber-400">
+                        <tr>
+                            <th class="py-2.5 px-3">Oyuncu</th>
+                            <th class="py-2.5 px-3 text-center">Elden Bitiş</th>
+                            <th class="py-2.5 px-3 text-center">Ceza Puanı</th>
+                            <th class="py-2.5 px-3 text-right">Toplam</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scoreboardBody" class="divide-y divide-gray-800">
+                        <!-- Dynamic Rows -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // Ham liste (Tüm gereksiz yazılar temizlendi, filtrelendi)
-        const rawList = `1|Yohoho.io
-2|Paper.io 2
-3|Paper.io 3D
-4|2048
-5|3D Free Kick
-6|Combines.word
-7|Achievement Unlocked
-8|Adventures With Anxiety
-9|Adventure Drivers
-10|Algebra Jump
-11|Alien Hominid
-12|Among Us
-14|Arcade Wizard
-15|Billiard Blitz Challenge
-27|Basketball Stars
-28|Bear on a Scooter
-30|Bitcoin Clicker
-31|Blocky Snakes
-33|Bloxors
-34|Bob The Robber 2
-35|Bouncing Hell
-37|Boxel Rebound
-38|Boxing Random
-39|Breaking The Bank
-40|Burrito Bison
-41|Cannon Basketball 4
-42|Cars Simulator
-43|Cave War
-44|Chrome Dino
-45|ClassiCube
-46|Connect 3
-47|Cookie Clicker
-48|CraftMine
-49|Creative Kill Chamber
-50|Deal or No Deal
-51|Death Run 3D
-53|DeathCar.IO
-55|Dodge
-56|Dogeminer
-57|Jump
-58|DragBox
-59|Drift Boss
-60|DRIFT HUNTERS
-61|Drive Mad
-63|Duck Life
-64|Retro Free
-68|DUKE DASHINGTON REMASTERED
-69|Eggy Car
-70|Elastic Face
-71|Endless war 3
-72|EraseBox
-75|Fireboy & Watergirl
-76|Fireboy & Watergirl 1
-77|Fireboy & Watergirl 2
-78|Fireboy & Watergirl 3
-79|Fireboy & Watergirl 4
-80|Flappy Bird
-81|Friday Night Funkin'
-82|Funny Shooter 2
-83|Geo Dash 2
-84|Geometry Dash
-85|Geometry Neon Dash
-86|Geometry Rash
-87|Getaway Shootout
-89|Getting Over It v1
-90|Gravity Soccer
-91|Guess the Number Game
-92|Gun Mayhem 2
-95|Gura Tambourine
-96|Happy Wheels Unblocked
-98|Helios
-99|Hoggy 2
-100|House of Hazards
-101|Idle breakout
-102|Iron Snout
-104|Jelly Truck
-105|Jetpack Joyride
-106|Johnny Upgrade
-107|Jump Jelly Jump
-108|Kart Fight IO
-109|Klocki Free
-110|Learn to fly
-112|Maptroid
-113|Merge Round Racers
-114|Mine Clone
-116|EaglercraftX 1.8
-117|Minecraft Classic
-118|Minesweeper
-119|MotoX3M
-120|MotoX3M2
-121|MotoX3M3
-122|MotoX3M Winter
-123|Moto X3M Pool Party
-124|Moto X3M Spooky Land
-126|RetroEmulator
-127|New Super Mario Bros. Versus
-128|nut simulator
-129|OvO
-131|OvO Dimensions
-132|OvO 2
-133|Pac-Man Remake
-138|Papa's Burgeria
-151|Paper Minecraft
-152|2020 Game
-154|P.Craft
-155|P.E. Noire
-156|PIXEL CAVE
-157|Pixel Gun 3D
-159|Plants vs Zombie
-160|Protektor
-161|PUSH
-162|Quake
-163|Rabbit Samurai
-164|Rabbit Samurai 2
-168|Retro Bowl
-172|Riddle School 5
-175|Riddle Transfer 2
-176|Rise Higher
-177|Rise of Neon Square
-179|Rock-Paper-Scissors Game
-180|Rocking Sky Trip
-181|Rooftop Snipers
-182|Rooftop Snipers 2
-184|ROOTS
-185|Scrambled Eggs
-186|Shards
-187|Skyblock
-188|Slice of Sasha
-189|Slime Rush TD
-190|Slope
-191|Slope 2
-192|Slope Ball
-193|JavaScript Snake Game
-194|Snake
-195|Snow Rider 3D
-196|Soccer Random
-197|Space is Key
-198|Stack Bump 3D
-199|Stealing The Diamond
-200|Stick Duel Battle
-201|Stickjet Challenge
-202|Stickman Boost
-203|Stickman Hook
-204|Stick Slasher
-205|Subway Surfers
-206|Subway Surfers Bali
-207|Super Mario Maker Online
-208|Super Mario 64
-209|Temple Run 2
-210|Scratcharia v2.8
-211|Territorial.io
-212|TwitchTetris
-213|THE Bowling Club
-214|The Impossible Quiz
-215|The Impossible Quiz 2
-216|The Little Giant
-218|There Is No Game
-219|Tic Tac Toe
-220|Tiny Fishing
-222|Tiny Fragments
-225|Trimps 5.9.2
-226|Tube Jumpers
-227|Tunnel Rush
-228|Tunnel Rush II
-230|Tunnelz
-231|Up Left Out
-232|Vex 3
-233|Vex 4
-234|Vex 5
-235|Vex 6
-236|Vex 7
-240|WhitePenRoad
-241|Wordle
-242|WORLD HARDEST GAME
-243|WHG2
-244|1v1 LOL
-245|99 Balls Evo
-246|10 Minutes Till Dawn
-247|Ages of Conflict
-248|Amazing Strange Rope Police
-249|Angry Sharks
-250|Boxing Stars
-251|Draw The Bridge
-253|Math Slither
-254|Mini Shooters
-256|Offline Paradise
-257|Police chase
-258|Rocket League
-259|Survival Karts
-260|Stickman SnowFight
-261|Tap Tap Shots 2
-262|Adam and Eve 5 Pt.1
-263|Adam and Eve 5 Pt.2
-264|A Dark Room
-265|Amidst the Clouds
-266|Apple Shooter
-267|Arcane Archer
-268|Avalanche
-269|Bacon May Die
-270|Black Knight
-271|Blumgi Slime
-272|Bomb It 7
-273|Box Head
-274|Champion Island
-275|Champion Archer
-277|Cubefield
-278|Dante
-279|Dead Again
-280|Defend the Tank
-281|Down The Hill
-282|Dragon vs Bricks
-283|Evil Glitch
-284|Fancy Pants Adventures
-285|Five Nights at Freddy's
-286|Five Nights at Winston's
-287|Froggy's Battle
-288|Frying Nemo
-289|Generic Fishing Game
-290|Geometry Dash Classic
-291|Geometry Dash Scratch
-292|Gimme the Airpod
-293|Gobdun
-294|GOODNIGHT
-295|Groovy Ski
-296|GSwitch
-297|GSwitch 2
-298|GSwitch 3
-299|Helicopter
-300|Hide And Smash
-301|Hungry Lamu
-302|Infinite Soccer
-303|Just Fall LOL
-304|Kitchen Gun Game
-305|Knife Master
-306|Matrix Rampage
-307|Mine Blocks
-308|Minecraft Classic Hacks
-309|Missiles
-311|n-gon
-312|Ninja vs Evil Corp
-313|NS-SHAFT
-314|Om Nom Bounce
-315|Papery Planes
-316|Polybranch
-317|Rolling Forests
-318|Rolly Vertex
-319|SHUTTLEDECK
-320|Skibidi Strike
-321|Smoking Barrels
-323|Soildier Legend
-324|Space Garden
-325|Station 141
-326|Stick Archers
-327|Stick Merge
-328|Subway Surfers New York
-329|Superhot
-330|Super Mario Construct
-331|Synesthesia
-332|Tactical Weapon Pack 2
-333|Tactical Assasin 2
-334|Tag
-335|Tank Trouble 2
-336|Tanuki Sunset
-337|This Is the Only Level
-343|Vex 8
-344|Wolfenstein 3D
-345|Big Red Button
-346|Bottle Flip
-349|Core Ball
-350|CS:GO Clicker
-351|Dinosaurs Merge Master
-352|Eel Slap!
-353|Fake Virus Screen
-354|Fruit Ninja
-355|Guess the Kitty
-356|Gura Temberine
-357|Hacker Typer
-358|Hop Pop It
-359|Idle Mining Empire
-360|Idle Restaurants
-361|Kitten Cannon
-362|Little Alchemy 2
-363|Minecraft Case Simulator
-364|Particle Clicker
-365|Push the Square
-366|Sort the Court
-367|Space Company
-368|Townscaper
-369|VELOCE
-370|Weave Silk
-371|We Become What We Behold
-372|WebGL Fluid Simulation
-373|1 on 1 Soccer
-374|3D Bowling
-375|8 Ball Pool
-376|Adrenaline Challenge
-377|Aquapark Slides
-378|Basket Champs
-379|Big Shot Boxing
-380|Biker Street
-381|Car Rush
-382|Cluster Rush
-383|Crazy Cars
-384|Draw the Hill
-385|Edge Let's Surf
-386|Endless Truck
-387|Football Brawl
-388|Football Legends
-389|Football Strike
-390|Get On Top
-391|Heads Arena Soccer All Stars
-392|Head Soccer 2023
-393|Medalin Stunt Car 2
-394|Moving Truck
-395|Penalty Shooters 2
-396|Scrap Metal 3
-397|Soccer Skills Euro Cup
-398|The Heist
-399|Volley Random
-400|X-Trial Racing
-401|1010 Color Match
-402|1010 Deluxe
-403|2048 Multitasking
-404|3 Pandas in Japan
-405|9007199254740992
-408|Bad Ice Cream 3
-409|Ball Sort Halloween
-410|Ball Sort Puzzle
-411|Ball Sort Soccer
-412|Ballistic
-413|Battle For Gondor
-414|Black Hole Square
-415|Block the Pig
-416|Bloons TD
-417|Bloons TD 2
-418|Bloons TD 4
-419|Blumgi Rocket
-420|Big Tower Tiny Square
-421|Bouncy Woods
-422|Bubble Pop Adventures
-423|Canyon Defense
-424|Cell Machine
-425|Checkers Legend
-426|CirclO
-427|circloO 2
-428|Climb Over It
-429|Crossy Road
-430|Cut the Rope
-431|Cut the Rope Holiday
-432|Cut the Rope: Time Travel
-433|Deepest Sword
-434|Dino Bros
-435|Doctor Acorn 2
-436|DOGE 2048
-437|Edge Not Found
-438|Escaping the Prison
-439|Evolution
-440|Exo
-441|Factory Balls Forever
-442|Farm Match Seasons
-443|Flash Tetris
-444|Fleeing the Complex
-445|Game Inside a Game
-446|George and the Printer
-447|Go Ball
-448|Google Feud
-449|Grey Box Testing
-450|Handshakes
-451|Hanger
-452|Hex Empire
-453|Hextris
-454|Icy Purple Head 2
-455|Icy Purple Head 3
-456|Infiltrating The Airship
-457|Jewels Blitz 5
-458|Marbles Sorting
-459|Meme 2048
-460|Mini-Putt
-461|Money Movers
-462|Money Movers 2
-463|Money Movers 3
-464|Park Out
-465|Portal
-466|Push Your Luck
-467|Riddle School 1
-468|Riddle School 4
-469|Riddle School Transfer 1
-470|Roper
-471|Super Stickman Golf
-472|Storm the House 2
-473|The Battle
-474|The Final Earth
-475|Tiny Islands
-477|Waterworks!
-478|Wall Smash
-479|xx142-b2.exe
-480|You Are Jeff Bezos
-481|BitLife
-482|Happy Hop
-483|Hover Bot Arena
-484|Just One Boss
-485|My Rusty Submarine
-486|Pandemic 2
-487|Papa's Pizzaria
-488|Sandboxels
-489|Santy is Home
-490|Sky Car Stunt
-491|Snowbattle
-492|Solitaire
-493|The Hotel
-494|Yoshi's Fabrication Station
-495|Mr Bullet 3D
-496|Mutazone
-497|Ninja Cat Exploit
-500|Papa Cherry Saga
-501|Parking Fury
-502|Parking Fury 2
-503|Parking Fury 3
-504|Penalty Kick Online
-505|Penalty Shooters 3
-506|Pixel Smash Duel
-507|Pizza Tower
-508|Pou
-509|Pudding Monsters
-510|Racing Monster Trucks
-511|Run 3 Space
-512|Rusher Crusher
-513|Save the Doge
-514|Sling Tomb
-515|Snail Bob 7
-516|Snail Bob 8
-517|Soccer Heads
-518|Space Bar Clicker
-519|Spider Solitaire
-520|Super Liquid Soccer
-521|Super Mario Wonder
-522|Swingo
-523|Tap Tap Shots
-524|Tower Crash 3D
-525|Traffic Control
-526|Turn Turn
-527|Wheelie Bike
-528|Wheelie Bike 2
-529|Wheely 2
-530|Wheely 3
-531|Wheely 4
-532|Wheely 5
-533|Wheely 6
-534|Wheely 7
-535|Wheely 8
-536|Wood Block Puzzle
-537|Woodventure
-538|Wordle Unlimited
-539|WordSlide
-540|Retro Bowl College
-541|Axis Football League
-542|Burrito Bison Revenge
-543|The Fancy Pants 2
-544|The Fancy Pants 3
-545|Galaga
-546|Dummy Never Fails
-547|Dummy Never Fails 2
-548|Gunblood
-549|Papas Taco Mia
-550|Gun Mayhem Redux
-551|Icycle
-553|Pokemon Emerald
-554|Pokemon Emerald 2
-555|Pokemon Firered`;
+        const COLORS = ['kirmizi', 'siyah', 'mavi', 'sari'];
+        const COLOR_MAP = { 'kirmizi': '#dc2626', 'siyah': '#1e293b', 'mavi': '#2563eb', 'sari': '#d97706' };
 
-        // Oyun verilerini işleme, akıllı ikon ve kategori atama
-        const gameLibrary = rawList.trim().split('\n').map(line => {
-            const [id, name] = line.split('|');
-            let cat = "Arcade";
-            let icon = "fa-gamepad";
-            let color = "from-zinc-700 to-zinc-900";
-            
-            const n = name.toLowerCase();
-            if(n.includes("soccer") || n.includes("football") || n.includes("basketball") || n.includes("golf") || n.includes("bowl") || n.includes("tennis") || n.includes("volley") || n.includes("kick")) { cat = "Spor"; icon = "fa-futbol"; color = "from-green-500 to-emerald-700"; }
-            else if(n.includes("car") || n.includes("moto") || n.includes("bike") || n.includes("drive") || n.includes("drift") || n.includes("truck") || n.includes("racing") || n.includes("wheely") || n.includes("rider")) { cat = "Yarış"; icon = "fa-car-side"; color = "from-orange-500 to-red-600"; }
-            else if(n.includes("clicker") || n.includes("idle") || n.includes("trimps") || n.includes("mining")) { cat = "Tıklama"; icon = "fa-mouse-pointer"; color = "from-yellow-500 to-amber-700"; }
-            else if(n.includes("puzzle") || n.includes("1010") || n.includes("2048") || n.includes("sort") || n.includes("math") || n.includes("word") || n.includes("guess") || n.includes("riddle")) { cat = "Bulmaca"; icon = "fa-puzzle-piece"; color = "from-purple-500 to-indigo-700"; }
-            else if(n.includes("mario") || n.includes("dash") || n.includes("vex") || n.includes("run") || n.includes("jump") || n.includes("slope") || n.includes("parkour") || n.includes("climb")) { cat = "Platform"; icon = "fa-running"; color = "from-blue-500 to-cyan-700"; }
-            else if(n.includes("gun") || n.includes("sniper") || n.includes("shooter") || n.includes("strike") || n.includes("assassin") || n.includes("blood") || n.includes("combat") || n.includes("war") || n.includes("fight") || n.includes("battle") || n.includes("kill") || n.includes("ninja") || n.includes("sword") || n.includes("weapon")) { cat = "Aksiyon"; icon = "fa-crosshairs"; color = "from-red-600 to-rose-900"; }
-            else if(n.includes(".io")) { cat = "IO"; icon = "fa-globe"; color = "from-teal-500 to-emerald-700"; }
-            else if(n.includes("pokemon") || n.includes("minecraft") || n.includes("craft") || n.includes("mine ") || n.includes("survival")) { cat = "Macera"; icon = "fa-map-marked-alt"; color = "from-emerald-600 to-lime-700"; }
-            else if(n.includes("escape") || n.includes("room") || n.includes("house") || n.includes("hotel")) { cat = "Gizem"; icon = "fa-door-open"; color = "from-slate-700 to-slate-900"; }
-            
-            return { id, name, cat, icon, color };
-        });
+        let gameState = {
+            mode: 'klasik', // 'klasik' or '101'
+            fillType: 'bots',
+            players: [
+                { id: 1, name: 'Oyuncu 1', isBot: false, score: 0 },
+                { id: 2, name: 'Ayşe (Bot)', isBot: true, score: 0 },
+                { id: 3, name: 'Ahmet (Bot)', isBot: true, score: 0 },
+                { id: 4, name: 'Mehmet (Bot)', isBot: true, score: 0 }
+            ],
+            currentTurn: 0, // 0 = Player 1
+            deck: [],
+            indicatorTile: null,
+            okeyTile: null,
+            discards: [[], [], [], []], // Atılan taşlar for each player
+            playerHands: [[], [], [], []], // Rack tiles
+            openedHands101: [[], [], [], []], // Opened sets in 101 mode
+            selectedTileIndex: null,
+            hasDrawnThisTurn: false
+        };
 
-        let currentActiveGame = null;
-        let isMuted = false;
+        // Web Audio Effects Synthesizer
+        const AudioFX = {
+            ctx: null,
+            init() {
+                if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+            },
+            playClick() {
+                this.init();
+                if (!this.ctx) return;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(100, this.ctx.currentTime + 0.05);
+                gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 0.05);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.05);
+            },
+            playTilePlace() {
+                this.init();
+                if (!this.ctx) return;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(180, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(60, this.ctx.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.4, this.ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 0.08);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.08);
+            }
+        };
 
-        function initApp() {
-            renderCategories();
-            renderGrid(gameLibrary);
-            renderSlider();
-            document.getElementById('library-count').innerText = `${gameLibrary.length} OYUN`;
-        }
+        function switchLobbyTab(tab) {
+            AudioFX.playClick();
+            const createSec = document.getElementById('createRoomSection');
+            const joinSec = document.getElementById('joinRoomSection');
+            const createBtn = document.getElementById('tabCreateBtn');
+            const joinBtn = document.getElementById('tabJoinBtn');
 
-        function renderCategories() {
-            const container = document.getElementById('category-container');
-            // Oyunlardan benzersiz kategorileri çek
-            const categories = ["Tümü", ...new Set(gameLibrary.map(g => g.cat))];
-            
-            container.innerHTML = categories.map((cat, idx) => `
-                <button onclick="filterCategory('${cat}')" 
-                        class="category-pill px-5 py-2 rounded-full bg-white/5 border border-white/10 text-xs font-bold uppercase tracking-wide ${idx === 0 ? 'active' : ''}">
-                    ${cat}
-                </button>
-            `).join('');
-        }
-
-        function renderGrid(games) {
-            const grid = document.getElementById('game-grid');
-            grid.innerHTML = "";
-            games.forEach(game => {
-                const card = document.createElement('div');
-                card.className = "game-card bg-zinc-900/40 backdrop-blur-md rounded-3xl overflow-hidden cursor-pointer group flex flex-col";
-                card.onclick = () => loadGame(game.id);
-                card.innerHTML = `
-                    <div class="h-36 bg-gradient-to-br ${game.color} flex items-center justify-center relative overflow-hidden">
-                        <i class="fas ${game.icon} text-5xl text-white/30 group-hover:scale-125 group-hover:text-white transition-all duration-700 z-10 drop-shadow-xl"></i>
-                        <div class="absolute bottom-2 right-3 text-[10px] font-mono font-black text-white/40 uppercase bg-black/20 px-2 py-1 rounded">#${game.id}</div>
-                    </div>
-                    <div class="p-5 flex-1 flex flex-col justify-between">
-                        <div>
-                            <span class="text-[9px] font-black uppercase tracking-widest text-red-500 mb-1 block">${game.cat}</span>
-                            <h3 class="text-sm font-bold text-white group-hover:text-red-500 transition-colors uppercase tracking-tight">${game.name}</h3>
-                        </div>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function renderSlider() {
-            const slider = document.getElementById('recommendation-slider');
-            // Menüye her dönüldüğünde 6 rastgele oyun seçilir
-            const randomGames = [...gameLibrary].sort(() => 0.5 - Math.random()).slice(0, 6);
-            
-            slider.innerHTML = "";
-            randomGames.forEach(game => {
-                const item = document.createElement('div');
-                item.className = "slider-item group cursor-pointer shadow-xl";
-                item.onclick = () => loadGame(game.id);
-                item.innerHTML = `
-                    <div class="h-48 rounded-3xl bg-gradient-to-br ${game.color} p-6 flex flex-col justify-between border border-white/10 relative overflow-hidden">
-                        <i class="fas ${game.icon} text-[80px] text-white/10 absolute -right-4 -bottom-4 group-hover:scale-110 group-hover:-rotate-12 transition-transform duration-500"></i>
-                        <span class="bg-black/30 self-start px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest backdrop-blur-sm text-white shadow-lg">${game.cat}</span>
-                        <div>
-                            <h4 class="text-xl font-black text-white uppercase tracking-tighter leading-none mb-2 drop-shadow-lg">${game.name}</h4>
-                            <p class="text-[10px] bg-white/20 inline-block px-3 py-1 rounded-full text-white uppercase font-bold backdrop-blur-sm group-hover:bg-white/40 transition-colors">
-                                Hemen Oyna <i class="fas fa-play ml-1"></i>
-                            </p>
-                        </div>
-                    </div>
-                `;
-                slider.appendChild(item);
-            });
-        }
-
-        function scrollSlider(dir) {
-            const s = document.getElementById('recommendation-slider');
-            s.scrollBy({ left: dir * 340, behavior: 'smooth' });
-        }
-
-        // Akıllı Dropdown Arama Sistemi
-        function handleSearch(val) {
-            const results = document.getElementById('search-results');
-            if(!val) { results.style.display = 'none'; return; }
-            
-            // Sadece girilen harfle (veya kelimeyle) başlayanları bulur
-            const filtered = gameLibrary.filter(g => g.name.toLowerCase().startsWith(val.toLowerCase()));
-            
-            if(filtered.length > 0) {
-                results.style.display = 'block';
-                results.innerHTML = filtered.map(g => `
-                    <div class="px-5 py-3 hover:bg-zinc-800 cursor-pointer flex items-center gap-4 border-b border-white/5 transition-colors" onclick="loadGame('${g.id}')">
-                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br ${g.color} flex items-center justify-center shadow-lg">
-                            <i class="fas ${g.icon} text-white"></i>
-                        </div>
-                        <div>
-                            <div class="text-sm font-bold text-white uppercase">${g.name}</div>
-                            <div class="text-[9px] text-zinc-500 uppercase font-black tracking-widest">${g.cat}</div>
-                        </div>
-                    </div>
-                `).join('');
+            if (tab === 'create') {
+                createSec.classList.remove('hidden');
+                joinSec.classList.add('hidden');
+                createBtn.className = "flex-1 py-2.5 rounded-lg text-sm font-bold bg-amber-600 text-white transition";
+                joinBtn.className = "flex-1 py-2.5 rounded-lg text-sm font-bold text-gray-400 hover:text-white transition";
             } else {
-                results.innerHTML = `<div class="p-6 text-center text-xs text-zinc-500 uppercase font-bold tracking-widest">Oyun Bulunamadı</div>`;
-                results.style.display = 'block';
+                createSec.classList.add('hidden');
+                joinSec.classList.remove('hidden');
+                joinBtn.className = "flex-1 py-2.5 rounded-lg text-sm font-bold bg-amber-600 text-white transition";
+                createBtn.className = "flex-1 py-2.5 rounded-lg text-sm font-bold text-gray-400 hover:text-white transition";
             }
         }
 
-        function filterCategory(cat) {
-            document.querySelectorAll('.category-pill').forEach(btn => {
-                btn.classList.remove('active');
-                if(btn.innerText.trim() === cat.toUpperCase()) btn.classList.add('active');
+        function openLobby() {
+            document.getElementById('lobbyModal').classList.remove('hidden');
+        }
+
+        function startGameFromLobby() {
+            AudioFX.playClick();
+            const mode = document.querySelector('input[name="gameMode"]:checked').value;
+            const fillType = document.getElementById('playerFillType').value;
+            const pName = document.getElementById('playerNameInput').value.trim() || 'Oyuncu 1';
+
+            gameState.mode = mode;
+            gameState.fillType = fillType;
+            gameState.players[0].name = pName;
+
+            if (fillType === 'pass_play') {
+                gameState.players[1] = { id: 2, name: 'Oyuncu 2', isBot: false, score: 0 };
+                gameState.players[2] = { id: 3, name: 'Oyuncu 3', isBot: false, score: 0 };
+                gameState.players[3] = { id: 4, name: 'Oyuncu 4', isBot: false, score: 0 };
+            }
+
+            document.getElementById('displayGameMode').innerText = mode === 'klasik' ? 'KLASİK OKEY' : '101 YÜZBİR OKEY';
+            if (mode === '101') {
+                document.getElementById('score101Badge').classList.remove('hidden');
+                document.getElementById('openHand101Btn').classList.remove('hidden');
+            } else {
+                document.getElementById('score101Badge').classList.add('hidden');
+                document.getElementById('openHand101Btn').classList.add('hidden');
+            }
+
+            document.getElementById('nameP2').innerText = gameState.players[1].name;
+            document.getElementById('nameP3').innerText = gameState.players[2].name;
+            document.getElementById('nameP4').innerText = gameState.players[3].name;
+
+            document.getElementById('lobbyModal').classList.add('hidden');
+            initNewGameRound();
+        }
+
+        function joinRoomAction() {
+            const code = document.getElementById('roomCodeInput').value.trim();
+            if(!code) return alert("Lütfen geçerli bir oda kodu giriniz!");
+            document.getElementById('roomCodeBadge').innerText = "ODA: #" + code.toUpperCase();
+            startGameFromLobby();
+        }
+
+        function generateDeck() {
+            let deck = [];
+            let tileId = 1;
+
+            // 2 sets of 1-13 for 4 colors = 104 tiles
+            for (let set = 0; set < 2; set++) {
+                for (let color of COLORS) {
+                    for (let num = 1; num <= 13; num++) {
+                        deck.push({ id: tileId++, color: color, number: num, isFake: false });
+                    }
+                }
+            }
+            // 2 Fake Okeys
+            deck.push({ id: tileId++, color: 'sahte', number: 0, isFake: true });
+            deck.push({ id: tileId++, color: 'sahte', number: 0, isFake: true });
+
+            // Fisher-Yates Shuffle
+            for (let i = deck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
+
+            return deck;
+        }
+
+        function initNewGameRound() {
+            gameState.deck = generateDeck();
+            gameState.discards = [[], [], [], []];
+            gameState.openedHands101 = [[], [], [], []];
+            gameState.hasDrawnThisTurn = false;
+
+            // Pick Indicator Tile
+            gameState.indicatorTile = gameState.deck.pop();
+
+            // Calculate Okey Tile (Same color, Number + 1)
+            if (gameState.indicatorTile.isFake) {
+                gameState.okeyTile = { color: 'kirmizi', number: 1 };
+            } else {
+                let nextNum = gameState.indicatorTile.number === 13 ? 1 : gameState.indicatorTile.number + 1;
+                gameState.okeyTile = { color: gameState.indicatorTile.color, number: nextNum };
+            }
+
+            // Deal tiles (15 to starting player, 14 to others)
+            const startingPlayer = Math.floor(Math.random() * 4);
+            gameState.currentTurn = startingPlayer;
+
+            for (let i = 0; i < 4; i++) {
+                let count = (i === startingPlayer) ? 15 : 14;
+                gameState.playerHands[i] = gameState.deck.splice(0, count);
+            }
+
+            if (startingPlayer === 0) {
+                gameState.hasDrawnThisTurn = true; // Starting player already has 15 tiles
+            }
+
+            renderBoard();
+            renderUserRack();
+            updateTurnUI();
+
+            if (gameState.players[gameState.currentTurn].isBot) {
+                setTimeout(handleBotTurn, 1000);
+            }
+        }
+
+        function renderTileHTML(tile, extraClass = '') {
+            if (!tile) return '';
+            
+            let displayVal = tile.number;
+            let colorClass = `tile-${tile.color}`;
+
+            // Check if tile is wild Okey
+            let isWildOkey = (!tile.isFake && tile.color === gameState.okeyTile.color && tile.number === gameState.okeyTile.number);
+            
+            if (tile.isFake) {
+                displayVal = '★';
+            }
+
+            return `
+                <div class="okey-tile ${colorClass} ${extraClass}" title="${tile.color} ${tile.number}">
+                    <span>${displayVal}</span>
+                    ${isWildOkey ? '<div class="absolute top-0.5 right-0.5 w-2 h-2 bg-amber-400 rounded-full"></div>' : ''}
+                </div>
+            `;
+        }
+
+        function renderBoard() {
+            // Render Indicator & Okey Tile
+            document.getElementById('indicatorTileSlot').innerHTML = renderTileHTML(gameState.indicatorTile, 'okey-indicator-glow');
+            document.getElementById('okeyTileSlot').innerHTML = renderTileHTML({ color: gameState.okeyTile.color, number: gameState.okeyTile.number }, 'border-2 border-amber-400');
+
+            // Render Deck Count
+            document.getElementById('deckCountBadge').innerText = gameState.deck.length;
+
+            // Render Discard Piles
+            for (let i = 0; i < 4; i++) {
+                const pileEl = document.getElementById(`discardP${i + 1}`);
+                const topDiscard = gameState.discards[i][gameState.discards[i].length - 1];
+                if (pileEl) {
+                    pileEl.innerHTML = topDiscard ? renderTileHTML(topDiscard) : '';
+                }
+            }
+
+            // Show Discard Take Button if it's user's turn
+            const takeBtn = document.getElementById('takeDiscardBtn');
+            const leftPlayerIndex = 3; // Player to left of user
+            if (gameState.currentTurn === 0 && !gameState.hasDrawnThisTurn && gameState.discards[leftPlayerIndex].length > 0) {
+                takeBtn.classList.remove('hidden');
+            } else {
+                takeBtn.classList.add('hidden');
+            }
+        }
+
+        function renderUserRack() {
+            const row1 = document.getElementById('rackRow1');
+            const row2 = document.getElementById('rackRow2');
+
+            row1.innerHTML = '';
+            row2.innerHTML = '';
+
+            const userTiles = gameState.playerHands[0];
+            const halfLength = Math.ceil(userTiles.length / 2);
+
+            userTiles.forEach((tile, index) => {
+                const isSelected = (gameState.selectedTileIndex === index);
+                const tileHTML = `
+                    <div onclick="selectRackTile(${index})" class="istaka-slot p-0.5 flex items-center justify-center">
+                        ${renderTileHTML(tile, isSelected ? 'selected' : '')}
+                    </div>
+                `;
+
+                if (index < 14) {
+                    row1.innerHTML += tileHTML;
+                } else {
+                    row2.innerHTML += tileHTML;
+                }
             });
-            
-            if(cat === 'Tümü') renderGrid(gameLibrary);
-            else renderGrid(gameLibrary.filter(g => g.cat === cat));
         }
 
-        function loadGame(gameId) {
-            const game = gameLibrary.find(g => g.id === gameId);
-            if(!game) return;
-            
-            // Arayüz geçişi
-            document.getElementById('dashboard').classList.add('hidden');
-            document.getElementById('search-results').style.display = 'none';
-            document.getElementById('game-search').value = "";
-            document.getElementById('game-view').classList.remove('hidden');
-            
-            // Oyun detayları
-            document.getElementById('active-game-title').innerText = game.name;
-            document.getElementById('active-game-cat').innerText = game.cat;
-            document.getElementById('active-game-id').innerText = `ID: ${game.id}`;
-
-            // Iframe Yüklemesi
-            const target = document.getElementById('iframe-target');
-            target.innerHTML = `<iframe id="active-frame" src="https://quiz-8.org/lessons/lesson-${gameId}/" allow="autoplay; fullscreen; keyboard; gamepad" loading="eager"></iframe>`;
-            
-            // Tam oyun deneyimi için sayfayı yukarı kaydır
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function showDashboard() {
-            document.getElementById('dashboard').classList.remove('hidden');
-            document.getElementById('game-view').classList.add('hidden');
-            document.getElementById('iframe-target').innerHTML = ""; // İframe'i öldür, performansı koru
-            renderSlider(); // Anasayfaya dönünce önerileri yenile
-        }
-
-        function reloadActiveGame() {
-            const frame = document.getElementById('active-frame');
-            if(frame) frame.src = frame.src;
-        }
-
-        function toggleFullscreen() {
-            const elem = document.getElementById('active-frame');
-            if (elem?.requestFullscreen) elem.requestFullscreen();
-        }
-
-        function toggleMute() {
-            isMuted = !isMuted;
-            document.getElementById('mute-icon').className = isMuted ? "fas fa-volume-mute" : "fas fa-volume-up";
-            document.getElementById('mute-btn').classList.toggle('text-red-600', isMuted);
-        }
-
-        // Tıklama ile arama dropdown'ını kapatma
-        document.addEventListener('click', (e) => {
-            if(!e.target.closest('#game-search') && !e.target.closest('#search-results')) {
-                document.getElementById('search-results').style.display = 'none';
+        function selectRackTile(index) {
+            AudioFX.playClick();
+            if (gameState.selectedTileIndex === index) {
+                // Second click on selected tile -> Discard tile if valid
+                if (gameState.currentTurn === 0 && gameState.hasDrawnThisTurn) {
+                    userDiscardTile(index);
+                    return;
+                }
+                gameState.selectedTileIndex = null;
+            } else {
+                gameState.selectedTileIndex = index;
             }
-        });
+            renderUserRack();
+        }
 
-        // Başlat
-        initApp();
+        function userDrawTile(source) {
+            if (gameState.currentTurn !== 0 || gameState.hasDrawnThisTurn) return;
+
+            let tileDrawn = null;
+            if (source === 'deck' && gameState.deck.length > 0) {
+                tileDrawn = gameState.deck.pop();
+            } else if (source === 'discard') {
+                const leftPlayerIndex = 3;
+                if (gameState.discards[leftPlayerIndex].length > 0) {
+                    tileDrawn = gameState.discards[leftPlayerIndex].pop();
+                }
+            }
+
+            if (tileDrawn) {
+                AudioFX.playTilePlace();
+                gameState.playerHands[0].push(tileDrawn);
+                gameState.hasDrawnThisTurn = true;
+                gameState.selectedTileIndex = gameState.playerHands[0].length - 1;
+                renderBoard();
+                renderUserRack();
+                updateTurnUI();
+            }
+        }
+
+        function userDiscardTile(index) {
+            if (gameState.currentTurn !== 0 || !gameState.hasDrawnThisTurn) return;
+
+            const discardedTile = gameState.playerHands[0].splice(index, 1)[0];
+            gameState.discards[0].push(discardedTile);
+            gameState.selectedTileIndex = null;
+            gameState.hasDrawnThisTurn = false;
+
+            AudioFX.playTilePlace();
+            advanceTurn();
+        }
+
+        function advanceTurn() {
+            gameState.currentTurn = (gameState.currentTurn + 1) % 4;
+            renderBoard();
+            renderUserRack();
+            updateTurnUI();
+
+            if (gameState.players[gameState.currentTurn].isBot) {
+                setTimeout(handleBotTurn, 1200);
+            }
+        }
+
+        function updateTurnUI() {
+            const statusEl = document.getElementById('turnStatusText');
+            if (gameState.currentTurn === 0) {
+                statusEl.innerText = gameState.hasDrawnThisTurn ? "Sıra Sizde: Bir Taş Atın" : "Sıra Sizde: Desteden Taş Çekin";
+                statusEl.className = "text-xs font-bold text-amber-400 animate-pulse";
+            } else {
+                statusEl.innerText = `${gameState.players[gameState.currentTurn].name} oynuyor...`;
+                statusEl.className = "text-xs text-gray-400";
+            }
+
+            // Highlight player boxes
+            for (let i = 1; i <= 4; i++) {
+                const box = document.getElementById(`player${i === 1 ? 'Bottom' : i === 2 ? 'Left' : i === 3 ? 'Top' : 'Right'}Box`);
+                if (box) {
+                    if ((i - 1) === gameState.currentTurn) {
+                        box.classList.add('border-amber-500', 'bg-amber-500/10');
+                    } else {
+                        box.classList.remove('border-amber-500', 'bg-amber-500/10');
+                    }
+                }
+            }
+        }
+
+        function sortRack(type) {
+            AudioFX.playClick();
+            let hand = gameState.playerHands[0];
+
+            if (type === 'color') {
+                hand.sort((a, b) => {
+                    if (a.color === b.color) return a.number - b.number;
+                    return a.color.localeCompare(b.color);
+                });
+            } else if (type === 'number') {
+                hand.sort((a, b) => {
+                    if (a.number === b.number) return a.color.localeCompare(b.color);
+                    return a.number - b.number;
+                });
+            }
+            renderUserRack();
+        }
+
+        function autoSortPairs() {
+            AudioFX.playClick();
+            // Automatically groups sets (runs of same color or sets of same number)
+            let hand = gameState.playerHands[0];
+            hand.sort((a, b) => {
+                if (a.color === b.color) return a.number - b.number;
+                return a.color.localeCompare(b.color);
+            });
+            renderUserRack();
+        }
+
+        function handleBotTurn() {
+            if (gameState.currentTurn === 0) return;
+
+            const botIndex = gameState.currentTurn;
+            const botHand = gameState.playerHands[botIndex];
+
+            // Bot draws tile
+            if (gameState.deck.length > 0) {
+                botHand.push(gameState.deck.pop());
+            }
+
+            // Bot discards a random non-essential tile after short delay
+            setTimeout(() => {
+                const discardIndex = Math.floor(Math.random() * botHand.length);
+                const discarded = botHand.splice(discardIndex, 1)[0];
+                gameState.discards[botIndex].push(discarded);
+
+                // Update count label
+                const labelMap = { 1: 'statusP2', 2: 'statusP3', 3: 'statusP4' };
+                if (labelMap[botIndex]) {
+                    document.getElementById(labelMap[botIndex]).innerText = `${botHand.length} Taş`;
+                }
+
+                AudioFX.playTilePlace();
+                advanceTurn();
+            }, 800);
+        }
+
+        function calculateHand101Score(hand) {
+            // Simplified set validation for 101 Okey
+            let totalScore = 0;
+            hand.forEach(t => {
+                if (!t.isFake) totalScore += t.number;
+            });
+            return totalScore;
+        }
+
+        function openHand101() {
+            AudioFX.playClick();
+            const score = calculateHand101Score(gameState.playerHands[0]);
+            document.getElementById('openedScoreVal').innerText = score;
+
+            if (score >= 101) {
+                alert(`Tebrikler! Toplam ${score} puanlık elinizi masaya açtınız!`);
+            } else {
+                alert(`Açmak için en az 101 puan gerekli. Mevcut Seri Puanınız: ${score}`);
+            }
+        }
+
+        function finishHandAction() {
+            AudioFX.playClick();
+            if (!gameState.hasDrawnThisTurn && gameState.currentTurn === 0) {
+                alert("Eli bitirmek için önce taş çekip okey taşını atmalısınız!");
+                return;
+            }
+
+            alert("Tebrikler! Eli başarıyla bitirdiniz. Puanlar hesaplandı!");
+            toggleScoreboard();
+        }
+
+        function toggleScoreboard() {
+            AudioFX.playClick();
+            const modal = document.getElementById('scoreModal');
+            const tbody = document.getElementById('scoreboardBody');
+
+            tbody.innerHTML = gameState.players.map(p => `
+                <tr class="border-b border-gray-800">
+                    <td class="py-3 px-3 font-semibold text-white">${p.name}</td>
+                    <td class="py-3 px-3 text-center text-emerald-400">0</td>
+                    <td class="py-3 px-3 text-center text-red-400">0</td>
+                    <td class="py-3 px-3 text-right font-bold text-amber-400">${p.score}</td>
+                </tr>
+            `).join('');
+
+            modal.classList.toggle('hidden');
+        }
+
+        // Initialize on load
+        window.onload = function() {
+            // Lobby is shown by default
+        };
     </script>
 </body>
 </html>
