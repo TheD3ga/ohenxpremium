@@ -1,201 +1,326 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" class="h-full">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profesyonel Okey & 101 Okey Salonu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VIP Okey & 101 Salonu - Canlı Çok Oyunculu</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome & Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
     <style>
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: #0d131a;
+            background-color: #080c11;
             user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
             overflow: hidden;
         }
-        
+
         .felt-table {
-            background: radial-gradient(circle, #1e5a2d 0%, #0d3818 70%, #051d0b 100%);
-            box-shadow: inset 0 0 100px rgba(0,0,0,0.8);
-            border: 16px solid #3d2314;
-            border-radius: 24px;
+            background: radial-gradient(circle at center, #1b5e20 0%, #0d3b13 70%, #051a07 100%);
+            box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.85);
+            border: 14px solid #3a1d0d;
+            border-radius: 28px;
         }
 
         .wood-border {
-            background: linear-gradient(135deg, #4a2810 0%, #291406 50%, #4a2810 100%);
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.8), 0 20px 40px rgba(0,0,0,0.6);
+            background: linear-gradient(135deg, #42230e 0%, #221005 50%, #42230e 100%);
+            box-shadow: inset 0 0 12px rgba(0,0,0,0.9), 0 20px 40px rgba(0,0,0,0.8);
         }
 
-        /* 3D Tile Styling */
+        /* 3D Tile Visuals */
         .okey-tile {
-            width: 42px;
-            height: 58px;
-            background: linear-gradient(145deg, #fffdf8 0%, #ede6d1 100%);
-            border-radius: 6px;
-            border-bottom: 4px solid #b89868;
-            box-shadow: 2px 4px 8px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.8);
+            width: 44px;
+            height: 60px;
+            background: linear-gradient(145deg, #ffffff 0%, #f3ebd7 100%);
+            border-radius: 7px;
+            border-bottom: 5px solid #bd9b64;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.9);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-weight: 800;
-            font-size: 20px;
-            cursor: pointer;
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            font-weight: 900;
+            font-size: 22px;
+            line-height: 1;
+            cursor: grab;
+            transition: transform 0.12s cubic-bezier(0.1, 0.7, 0.1, 1), box-shadow 0.12s ease;
             position: relative;
+            flex-shrink: 0;
         }
 
-        .okey-tile:hover {
-            transform: translateY(-6px) scale(1.05);
-            box-shadow: 0 10px 15px rgba(0,0,0,0.5);
-            z-index: 20;
+        .okey-tile:active {
+            cursor: grabbing;
         }
 
         .okey-tile.selected {
-            transform: translateY(-12px);
+            transform: translateY(-14px) scale(1.06);
             border: 2px solid #3b82f6;
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.8);
-            z-index: 30;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.9), 0 10px 15px rgba(0,0,0,0.5);
+            z-index: 40;
         }
 
         .okey-tile.okey-indicator-glow {
-            box-shadow: 0 0 15px #f59e0b, 0 0 5px #f59e0b inset;
+            box-shadow: 0 0 16px #f59e0b, 0 0 6px #f59e0b inset;
             border: 2px solid #f59e0b;
         }
 
+        .okey-tile.is-wild-okey::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            width: 8px;
+            height: 8px;
+            background-color: #f59e0b;
+            border-radius: 50%;
+            box-shadow: 0 0 6px #f59e0b;
+        }
+
+        /* Color Schemes */
         .tile-kirmizi { color: #dc2626; }
-        .tile-siyah { color: #1e293b; }
+        .tile-siyah { color: #111827; }
         .tile-mavi { color: #2563eb; }
         .tile-sari { color: #d97706; }
         .tile-sahte { color: #7c3aed; }
 
-        /* Istaka Rack Styling */
+        /* Physical Rack Styling */
         .istaka-rack {
-            background: linear-gradient(180deg, #61381c 0%, #3d210e 100%);
-            border-radius: 12px;
-            border: 2px solid #8c5229;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.7), inset 0 2px 4px rgba(255,255,255,0.2);
+            background: linear-gradient(180deg, #573117 0%, #311a0b 100%);
+            border-radius: 14px;
+            border: 2px solid #784420;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.8), inset 0 2px 4px rgba(255,255,255,0.2);
         }
 
         .istaka-slot {
-            background: rgba(0,0,0,0.3);
-            border-radius: 4px;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.6);
+            width: 48px;
+            height: 64px;
+            background: rgba(0, 0, 0, 0.35);
+            border-radius: 6px;
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.15s ease;
         }
 
-        /* Modal Blur */
+        .istaka-slot.drag-over {
+            background: rgba(245, 158, 11, 0.25);
+            border-color: #f59e0b;
+        }
+
         .modal-blur {
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(10px);
         }
 
         .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
+            width: 5px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
             background: rgba(0,0,0,0.2);
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.2);
+            background: rgba(245, 158, 11, 0.4);
             border-radius: 3px;
         }
-    </style>
-</head>
-<body class="h-screen w-screen flex flex-col justify-between p-2 select-none">
 
-    <!-- LOBBY / ROOM SETUP MODAL -->
-    <div id="lobbyModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 modal-blur p-4">
-        <div class="bg-gray-900 border border-gray-700 w-full max-w-xl rounded-2xl p-6 shadow-2xl text-white relative">
+        @keyframes turnPulse {
+            0%, 100% { border-color: rgba(245, 158, 11, 0.4); box-shadow: 0 0 10px rgba(245, 158, 11, 0.2); }
+            50% { border-color: rgba(245, 158, 11, 1); box-shadow: 0 0 25px rgba(245, 158, 11, 0.7); }
+        }
+
+        .active-turn-box {
+            animation: turnPulse 1.8s infinite;
+        }
+    </style>
+
+    <!-- Firebase Modular Imports -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, onSnapshot, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global Firebase state container
+        window.FirebaseApp = {
+            app: null,
+            auth: null,
+            db: null,
+            user: null,
+            appId: typeof __app_id !== 'undefined' ? __app_id : 'okey-pro-v1',
+            isOnline: false,
+            roomRef: null,
+            roomUnsubscribe: null
+        };
+
+        const firebaseConfig = typeof __firebase_config !== 'undefined' 
+            ? JSON.parse(__firebase_config) 
+            : {
+                apiKey: "AIzaSyDemoKeyPlaceholderForLocal",
+                authDomain: "demo-okey.firebaseapp.com",
+                projectId: "demo-okey",
+                storageBucket: "demo-okey.appspot.com",
+                messagingSenderId: "123456789",
+                appId: "1:123456789:web:demo"
+            };
+
+        try {
+            window.FirebaseApp.app = initializeApp(firebaseConfig);
+            window.FirebaseApp.auth = getAuth(window.FirebaseApp.app);
+            window.FirebaseApp.db = getFirestore(window.FirebaseApp.app);
+
+            const token = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+            if (token) {
+                await signInWithCustomToken(window.FirebaseApp.auth, token);
+            } else {
+                await signInAnonymously(window.FirebaseApp.auth);
+            }
+
+            onAuthStateChanged(window.FirebaseApp.auth, (u) => {
+                if (u) {
+                    window.FirebaseApp.user = u;
+                    window.FirebaseApp.isOnline = true;
+                    console.log("Firebase Auth Authenticated:", u.uid);
+                    if (window.onAuthReady) window.onAuthReady(u);
+                }
+            });
+        } catch (e) {
+            console.warn("Firebase fallback mode activated (Offline AI mode available):", e);
+        }
+    </script>
+</head>
+<body class="h-full w-full flex flex-col justify-between p-2 select-none overflow-hidden">
+
+    <!-- LOBBY & ROOM MANAGEMENT MODAL -->
+    <div id="lobbyModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/85 modal-blur p-4">
+        <div class="bg-gray-900 border border-amber-500/30 w-full max-w-xl rounded-2xl p-6 shadow-2xl text-white relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-40 h-40 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            
             <div class="text-center mb-6">
-                <h1 class="font-['Cinzel'] text-4xl font-bold text-amber-500 tracking-wider mb-1"><i class="fa-solid fa-layer-group mr-2"></i>VIP OKEY & 101</h1>
-                <p class="text-gray-400 text-sm">Arkadaşlarınla veya Yapay Zekaya Karşı Oyna</p>
+                <h1 class="font-['Cinzel'] text-4xl font-extrabold text-amber-500 tracking-wider mb-1 flex items-center justify-center gap-3">
+                    <i class="fa-solid fa-crown text-amber-400"></i> VIP OKEY 101
+                </h1>
+                <p class="text-gray-400 text-xs font-semibold uppercase tracking-widest">Canlı Çok Oyunculu & Yapay Zeka Salonu</p>
             </div>
 
             <!-- Tab Buttons -->
-            <div class="flex bg-gray-800 p-1 rounded-xl mb-6">
-                <button id="tabCreateBtn" onclick="switchLobbyTab('create')" class="flex-1 py-2.5 rounded-lg text-sm font-bold bg-amber-600 text-white transition">Oda Kur</button>
+            <div class="flex bg-gray-800/80 p-1 rounded-xl mb-6 border border-gray-700/50">
+                <button id="tabCreateBtn" onclick="switchLobbyTab('create')" class="flex-1 py-2.5 rounded-lg text-sm font-bold bg-amber-600 text-white shadow-md transition">Oda Kur</button>
                 <button id="tabJoinBtn" onclick="switchLobbyTab('join')" class="flex-1 py-2.5 rounded-lg text-sm font-bold text-gray-400 hover:text-white transition">Odaya Katıl</button>
             </div>
 
-            <!-- Create Room Section -->
-            <div id="createRoomSection" class="space-y-5">
+            <!-- Create Room Form -->
+            <div id="createRoomSection" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Oyun Modu</label>
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Oyun Modu</label>
                     <div class="grid grid-cols-2 gap-3">
                         <label class="cursor-pointer">
-                            <input type="radio" name="gameMode" value="klasik" checked class="peer hidden">
-                            <div class="p-3 border border-gray-700 rounded-xl bg-gray-800/60 peer-checked:border-amber-500 peer-checked:bg-amber-500/10 text-center transition">
-                                <div class="font-bold text-amber-400">Klasik Okey</div>
-                                <div class="text-xs text-gray-400 mt-0.5">Klasik 14 Taş Bitişli</div>
+                            <input type="radio" name="gameMode" value="101" checked class="peer hidden">
+                            <div class="p-3.5 border border-gray-700 rounded-xl bg-gray-800/50 peer-checked:border-amber-500 peer-checked:bg-amber-500/10 text-center transition">
+                                <div class="font-bold text-amber-400 text-sm">101 Yüzbir Okey</div>
+                                <div class="text-[11px] text-gray-400 mt-1">101 Barajı & Çift Açma</div>
                             </div>
                         </label>
                         <label class="cursor-pointer">
-                            <input type="radio" name="gameMode" value="101" class="peer hidden">
-                            <div class="p-3 border border-gray-700 rounded-xl bg-gray-800/60 peer-checked:border-amber-500 peer-checked:bg-amber-500/10 text-center transition">
-                                <div class="font-bold text-amber-400">101 Yüzbir Okey</div>
-                                <div class="text-xs text-gray-400 mt-0.5">Barajlı & Çift Açmalı</div>
+                            <input type="radio" name="gameMode" value="klasik" class="peer hidden">
+                            <div class="p-3.5 border border-gray-700 rounded-xl bg-gray-800/50 peer-checked:border-amber-500 peer-checked:bg-amber-500/10 text-center transition">
+                                <div class="font-bold text-amber-400 text-sm">Klasik Okey</div>
+                                <div class="text-[11px] text-gray-400 mt-1">Klasik 14 Taş Bitişli</div>
                             </div>
                         </label>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Oyuncu Türü</label>
-                    <select id="playerFillType" class="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-sm focus:outline-none focus:border-amber-500">
-                        <option value="bots">Tek Oyunculu (3 Akıllı Bot Botlar ile)</option>
-                        <option value="pass_play">Yerel Çok Oyunculu (Aynı Ekrandan Paslaşarak)</option>
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Eşlik Durumu</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="teamMode" value="single" checked class="peer hidden">
+                            <div class="p-2.5 border border-gray-700 rounded-xl bg-gray-800/50 peer-checked:border-amber-500 peer-checked:bg-amber-500/10 text-center transition text-xs font-bold text-gray-200">
+                                Tekli (Bireysel)
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="teamMode" value="partner" class="peer hidden">
+                            <div class="p-2.5 border border-gray-700 rounded-xl bg-gray-800/50 peer-checked:border-amber-500 peer-checked:bg-amber-500/10 text-center transition text-xs font-bold text-amber-400">
+                                Eşli Okey (2 v 2)
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Oyuncu Türü</label>
+                    <select id="playerFillType" class="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-sm focus:outline-none focus:border-amber-500 text-gray-200">
+                        <option value="bots">Tek Oyunculu (Eksik Yerlere Akıllı Botlar)</option>
+                        <option value="online">Online / Arkadaşlarla (Canlı Oda)</option>
                     </select>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Oyuncu Adınız</label>
-                    <input type="text" id="playerNameInput" value="Oyuncu 1" class="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" placeholder="İsminizi girin">
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Oyuncu Adınız</label>
+                    <input type="text" id="playerNameInput" value="Oyuncu 1" class="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500">
                 </div>
 
-                <button onclick="startGameFromLobby()" class="w-full py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 rounded-xl font-bold text-lg shadow-lg transform transition active:scale-95 text-gray-950">
-                    Masayı Kur ve Başla <i class="fa-solid fa-play ml-2"></i>
+                <button onclick="startGameFromLobby()" class="w-full py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 rounded-xl font-extrabold text-base shadow-lg transform transition active:scale-98 text-gray-950 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-play"></i> Masayı Kur ve Başla
                 </button>
             </div>
 
-            <!-- Join Room Section -->
-            <div id="joinRoomSection" class="space-y-5 hidden">
+            <!-- Join Room Form -->
+            <div id="joinRoomSection" class="space-y-4 hidden">
                 <div>
-                    <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Oda Kodu</label>
-                    <input type="text" id="roomCodeInput" placeholder="Örn: OKY-8492" class="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-sm uppercase tracking-wider text-center font-mono focus:outline-none focus:border-amber-500">
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Oda Kodu</label>
+                    <input type="text" id="roomCodeInput" placeholder="Örn: OKY-8492" class="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-lg uppercase tracking-widest text-center font-mono focus:outline-none focus:border-amber-500 text-amber-400 font-bold">
                 </div>
-                <button onclick="joinRoomAction()" class="w-full py-4 bg-blue-600 hover:bg-blue-700 rounded-xl font-bold text-lg shadow-lg transform transition active:scale-95 text-white">
-                    Odaya Katıl <i class="fa-solid fa-right-to-bracket ml-2"></i>
+                <button onclick="joinRoomAction()" class="w-full py-3.5 bg-blue-600 hover:bg-blue-700 rounded-xl font-extrabold text-base shadow-lg transform transition active:scale-98 text-white flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-right-to-bracket"></i> Canlı Odaya Katıl
                 </button>
             </div>
         </div>
     </div>
 
     <!-- HEADER BAR -->
-    <header class="w-full bg-gray-900/80 border border-gray-800 rounded-xl px-4 py-2 flex items-center justify-between text-white shadow-xl backdrop-blur-md">
+    <header class="w-full bg-gray-900/90 border border-gray-800 rounded-xl px-4 py-2 flex items-center justify-between text-white shadow-xl backdrop-blur-md relative z-20">
         <div class="flex items-center space-x-3">
             <div class="w-10 h-10 bg-amber-500/20 border border-amber-500/40 rounded-lg flex items-center justify-center text-amber-400 font-bold">
                 <i class="fa-solid fa-gem text-lg"></i>
             </div>
             <div>
                 <div class="flex items-center space-x-2">
-                    <span id="displayGameMode" class="font-bold text-amber-400 text-sm uppercase tracking-wider">KLASİK OKEY</span>
-                    <span id="roomCodeBadge" class="bg-gray-800 text-xs px-2 py-0.5 rounded border border-gray-700 text-gray-300 font-mono">ODA: #LOCAL</span>
+                    <span id="displayGameMode" class="font-black text-amber-400 text-xs uppercase tracking-wider">101 OKEY</span>
+                    <span id="roomCodeBadge" class="bg-gray-800 text-[11px] px-2 py-0.5 rounded border border-gray-700 text-amber-300 font-mono">ODA: #LOCAL</span>
                 </div>
-                <div class="text-xs text-gray-400" id="turnStatusText">Sıra sizde</div>
+                <div class="text-xs text-gray-300 font-semibold flex items-center gap-2" id="turnStatusText">
+                    <span>Sıra sizde</span>
+                    <span id="timerBadge" class="bg-red-900/60 text-red-300 px-1.5 py-0.2 rounded text-[10px] font-mono border border-red-700">30s</span>
+                </div>
             </div>
         </div>
 
-        <div class="flex items-center space-x-3">
-            <!-- 101 Score Display if active -->
-            <div id="score101Badge" class="hidden bg-gray-800/90 border border-amber-500/30 px-3 py-1 rounded-lg text-xs font-semibold text-amber-300">
-                Açılan Toplam Seri: <span id="openedScoreVal" class="font-bold text-emerald-400 text-sm">0</span> / 101
+        <div class="flex items-center space-x-2">
+            <!-- 101 Score Tracker -->
+            <div id="score101Badge" class="bg-gray-800/90 border border-amber-500/30 px-3 py-1 rounded-lg text-xs font-semibold text-amber-300 flex items-center gap-2">
+                <span>Top Seri:</span>
+                <span id="openedScoreVal" class="font-extrabold text-emerald-400 text-sm">0</span>
+                <span class="text-gray-500">/ 101</span>
             </div>
 
-            <button onclick="toggleScoreboard()" class="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 rounded-lg text-xs font-semibold border border-gray-700 transition flex items-center">
-                <i class="fa-solid fa-list-ol mr-1.5 text-amber-400"></i> Yazboz
+            <button onclick="toggleScoreboard()" class="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 rounded-lg text-xs font-semibold border border-gray-700 transition flex items-center gap-1.5 text-gray-200">
+                <i class="fa-solid fa-list-ol text-amber-400"></i> Yazboz
             </button>
-            <button onclick="openLobby()" class="px-3 py-1.5 bg-red-900/60 hover:bg-red-800/60 text-red-200 rounded-lg text-xs font-semibold border border-red-700/50 transition">
-                <i class="fa-solid fa-door-open mr-1.5"></i> Çık
+            <button onclick="toggleChat()" class="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 rounded-lg text-xs font-semibold border border-gray-700 transition flex items-center gap-1.5 text-gray-200 relative">
+                <i class="fa-solid fa-comments text-amber-400"></i> Sohbet
+                <span id="chatBadge" class="hidden absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full"></span>
+            </button>
+            <button onclick="openLobby()" class="px-3 py-1.5 bg-red-900/50 hover:bg-red-800/60 text-red-200 rounded-lg text-xs font-semibold border border-red-700/50 transition flex items-center gap-1">
+                <i class="fa-solid fa-door-open"></i> Çık
             </button>
         </div>
     </header>
@@ -204,120 +329,128 @@
     <main class="flex-1 my-2 relative wood-border rounded-2xl overflow-hidden p-3 flex flex-col justify-between">
         <div class="felt-table absolute inset-0"></div>
 
-        <!-- TOP PLAYER (BOT 2) -->
+        <!-- TOP PLAYER (P3 / BOT 2) -->
         <div class="relative z-10 flex flex-col items-center">
-            <div id="playerTopBox" class="bg-gray-900/80 border border-gray-700 rounded-xl px-4 py-1.5 text-center text-white shadow-lg flex items-center space-x-3">
+            <div id="playerTopBox" class="bg-gray-900/90 border border-gray-700 rounded-xl px-4 py-1.5 text-center text-white shadow-lg flex items-center space-x-3 transition">
                 <div class="relative">
-                    <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center font-bold text-xs">P3</div>
+                    <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center font-bold text-xs shadow-md" id="avatarP3">P3</div>
                     <div id="indicatorP3" class="hidden absolute -bottom-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-gray-900"></div>
                 </div>
                 <div class="text-left">
-                    <div class="text-xs font-bold" id="nameP3">Ahmet (Bot)</div>
-                    <div class="text-[10px] text-gray-400" id="statusP3">Taş Sayısı: 14</div>
+                    <div class="text-xs font-extrabold flex items-center gap-1">
+                        <span id="nameP3">Ahmet (Bot)</span>
+                        <span id="teamBadgeP3" class="text-[9px] bg-amber-500/20 text-amber-300 px-1 rounded hidden">EŞ</span>
+                    </div>
+                    <div class="text-[10px] text-gray-400" id="statusP3">Taş: 14</div>
                 </div>
             </div>
-            <!-- Top Discard Pile -->
-            <div class="mt-2 h-14 w-12 border-2 border-dashed border-white/20 rounded-lg flex items-center justify-center" id="discardP3"></div>
+            <!-- Top Discard Zone -->
+            <div class="mt-1 h-14 w-12 border border-dashed border-white/20 rounded-lg flex items-center justify-center bg-black/20" id="discardP3"></div>
         </div>
 
-        <!-- MIDDLE SECTION (LEFT PLAYER, CENTER DECK/INDICATOR, RIGHT PLAYER) -->
-        <div class="relative z-10 flex justify-between items-center px-4">
-            <!-- LEFT PLAYER (BOT 1) -->
-            <div class="flex items-center space-x-3">
-                <div id="playerLeftBox" class="bg-gray-900/80 border border-gray-700 rounded-xl p-2 text-center text-white shadow-lg flex flex-col items-center">
-                    <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center font-bold text-xs mb-1">P2</div>
-                    <div class="text-xs font-bold" id="nameP2">Ayşe (Bot)</div>
+        <!-- MIDDLE AREA (LEFT PLAYER, CENTER DECK / OPENED MELDS, RIGHT PLAYER) -->
+        <div class="relative z-10 flex justify-between items-center px-2 my-auto">
+            <!-- LEFT PLAYER (P2) -->
+            <div class="flex items-center space-x-2">
+                <div id="playerLeftBox" class="bg-gray-900/90 border border-gray-700 rounded-xl p-2 text-center text-white shadow-lg flex flex-col items-center transition">
+                    <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center font-bold text-xs mb-1 shadow-md" id="avatarP2">P2</div>
+                    <div class="text-xs font-extrabold" id="nameP2">Ayşe (Bot)</div>
                     <div class="text-[10px] text-gray-400" id="statusP2">14 Taş</div>
                 </div>
-                <!-- Left Discard Pile -->
-                <div class="h-14 w-12 border-2 border-dashed border-white/20 rounded-lg flex items-center justify-center" id="discardP2"></div>
+                <!-- Left Discard Pile (Previous player's tile to pull) -->
+                <div class="h-14 w-12 border border-dashed border-white/20 rounded-lg flex items-center justify-center bg-black/20" id="discardP2"></div>
             </div>
 
-            <!-- CENTER TABLE DECK & INDICATOR -->
-            <div class="flex items-center space-x-6 bg-black/30 p-4 rounded-2xl border border-white/10 backdrop-blur-sm">
-                <!-- DRAW DECK -->
-                <div onclick="userDrawTile('deck')" class="flex flex-col items-center cursor-pointer group">
-                    <div class="relative">
-                        <div class="w-12 h-16 bg-amber-100 rounded-lg border-b-4 border-amber-800 shadow-xl flex items-center justify-center font-bold text-amber-900 group-hover:scale-105 transition transform">
-                            <i class="fa-solid fa-layer-group text-xl opacity-40"></i>
+            <!-- CENTER TABLE (DRAW DECK, INDICATOR, OPENED HANDS DISPLAY AREA) -->
+            <div class="flex-1 max-w-2xl mx-4 bg-black/35 p-3 rounded-2xl border border-white/10 backdrop-blur-sm flex flex-col items-center justify-between min-h-[160px]">
+                
+                <!-- Deck & Indicator Row -->
+                <div class="flex items-center space-x-6 w-full justify-center">
+                    <!-- DRAW DECK -->
+                    <div onclick="userDrawTile('deck')" class="flex flex-col items-center cursor-pointer group">
+                        <div class="relative">
+                            <div class="w-12 h-16 bg-amber-100 rounded-lg border-b-4 border-amber-800 shadow-2xl flex items-center justify-center font-bold text-amber-900 group-hover:scale-105 transition transform">
+                                <i class="fa-solid fa-layer-group text-2xl opacity-50"></i>
+                            </div>
+                            <span id="deckCountBadge" class="absolute -top-2 -right-2 bg-red-600 text-white text-[11px] font-extrabold px-1.5 py-0.5 rounded-full shadow-lg">106</span>
                         </div>
-                        <span id="deckCountBadge" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-extrabold px-1.5 py-0.5 rounded-full shadow">84</span>
+                        <span class="text-[10px] font-bold text-amber-200/90 mt-1 uppercase tracking-wider">Taş Çek</span>
                     </div>
-                    <span class="text-[10px] font-bold text-amber-200/80 mt-1 uppercase tracking-wider">Taş Çek</span>
-                </div>
 
-                <!-- INDICATOR TILE & OKEY DISPLAY -->
-                <div class="flex flex-col items-center">
-                    <div class="flex items-center space-x-2">
-                        <!-- Gösterge -->
+                    <!-- INDICATOR & OKEY DISPLAY -->
+                    <div class="flex items-center space-x-3 bg-black/30 p-2 rounded-xl border border-white/5">
                         <div class="text-center">
                             <div class="text-[9px] text-gray-300 font-bold uppercase mb-0.5">Gösterge</div>
                             <div id="indicatorTileSlot"></div>
                         </div>
-                        <!-- Okey -->
                         <div class="text-center">
                             <div class="text-[9px] text-amber-400 font-bold uppercase mb-0.5">Okey Taş</div>
                             <div id="okeyTileSlot"></div>
                         </div>
                     </div>
                 </div>
+
+                <!-- TABLE OPENED MELLES DISPLAY CONTAINER (101 Mode Table Sets) -->
+                <div id="openedHandsTable" class="w-full mt-2 bg-black/40 rounded-xl p-2 border border-white/5 max-h-[90px] overflow-y-auto custom-scrollbar flex flex-wrap gap-2 items-center justify-center min-h-[45px]">
+                    <div class="text-[11px] text-gray-500 italic">Henüz masaya açılan el yok</div>
+                </div>
             </div>
 
-            <!-- RIGHT PLAYER (BOT 3) -->
-            <div class="flex items-center space-x-3">
-                <!-- Right Discard Pile -->
-                <div class="h-14 w-12 border-2 border-dashed border-white/20 rounded-lg flex items-center justify-center" id="discardP4"></div>
-                <div id="playerRightBox" class="bg-gray-900/80 border border-gray-700 rounded-xl p-2 text-center text-white shadow-lg flex flex-col items-center">
-                    <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center font-bold text-xs mb-1">P4</div>
-                    <div class="text-xs font-bold" id="nameP4">Mehmet (Bot)</div>
+            <!-- RIGHT PLAYER (P4) -->
+            <div class="flex items-center space-x-2">
+                <!-- Right Discard Zone -->
+                <div class="h-14 w-12 border border-dashed border-white/20 rounded-lg flex items-center justify-center bg-black/20" id="discardP4"></div>
+                <div id="playerRightBox" class="bg-gray-900/90 border border-gray-700 rounded-xl p-2 text-center text-white shadow-lg flex flex-col items-center transition">
+                    <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center font-bold text-xs mb-1 shadow-md" id="avatarP4">P4</div>
+                    <div class="text-xs font-extrabold" id="nameP4">Mehmet (Bot)</div>
                     <div class="text-[10px] text-gray-400" id="statusP4">14 Taş</div>
                 </div>
             </div>
         </div>
 
-        <!-- BOTTOM SECTION (CURRENT USER / DISCARD RACK) -->
-        <div class="relative z-10 flex flex-col items-center">
-            <!-- User's Discard Zone -->
+        <!-- BOTTOM SECTION (CURRENT PLAYER ISTAKA & ACTION CONTROLS) -->
+        <div class="relative z-10 flex flex-col items-center w-full">
+            <!-- Discard Zone for Player 1 -->
             <div class="mb-2 flex items-center space-x-4">
-                <div class="text-xs text-amber-300/80 font-semibold">Atılan Taşlar:</div>
-                <div id="discardP1" class="h-14 w-12 border-2 border-dashed border-white/30 rounded-lg flex items-center justify-center bg-black/20"></div>
-                <button onclick="userDrawTile('discard')" id="takeDiscardBtn" class="hidden px-3 py-1 bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold text-xs rounded-lg shadow-md transition">
-                    Soldan Taş Al <i class="fa-solid fa-hand-holding mr-1"></i>
+                <span class="text-xs text-amber-300/80 font-bold uppercase tracking-wider">Atılan Taş:</span>
+                <div id="discardP1" class="h-14 w-12 border-2 border-dashed border-amber-500/40 rounded-lg flex items-center justify-center bg-black/30"></div>
+                <button onclick="userDrawTile('discard')" id="takeDiscardBtn" class="hidden px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-gray-950 font-extrabold text-xs rounded-lg shadow-lg transition transform active:scale-95 animate-bounce">
+                    Soldan Taş Al <i class="fa-solid fa-hand-holding-medical ml-1"></i>
                 </button>
             </div>
 
-            <!-- RACK (ISTAKA) CONTROLS & RACK CONTAINER -->
+            <!-- PHYSICAL RACK CONTAINER -->
             <div class="w-full max-w-5xl">
-                <!-- Rack Action Buttons -->
-                <div class="flex items-center justify-between mb-2 px-2">
+                <!-- Rack Action Bar -->
+                <div class="flex items-center justify-between mb-2 px-1">
                     <div class="flex items-center space-x-2">
-                        <button onclick="sortRack('color')" class="px-2.5 py-1 bg-gray-800 hover:bg-gray-700 text-white text-xs rounded-md border border-gray-700 transition">
-                            <i class="fa-solid fa-palette text-amber-400 mr-1"></i> Renge Göre Diz
+                        <button onclick="sortRack('color')" class="px-2.5 py-1 bg-gray-800 hover:bg-gray-700 text-white text-xs rounded-md border border-gray-700 font-semibold transition flex items-center gap-1 shadow">
+                            <i class="fa-solid fa-palette text-amber-400"></i> Renge Göre
                         </button>
-                        <button onclick="sortRack('number')" class="px-2.5 py-1 bg-gray-800 hover:bg-gray-700 text-white text-xs rounded-md border border-gray-700 transition">
-                            <i class="fa-solid fa-arrow-down-1-9 text-amber-400 mr-1"></i> Sayıya Göre Diz
+                        <button onclick="sortRack('number')" class="px-2.5 py-1 bg-gray-800 hover:bg-gray-700 text-white text-xs rounded-md border border-gray-700 font-semibold transition flex items-center gap-1 shadow">
+                            <i class="fa-solid fa-arrow-down-1-9 text-amber-400"></i> Sayıya Göre
                         </button>
-                        <button onclick="autoSortPairs()" class="px-2.5 py-1 bg-gray-800 hover:bg-gray-700 text-white text-xs rounded-md border border-gray-700 transition">
-                            <i class="fa-solid fa-border-all text-amber-400 mr-1"></i> Perleri Diz
+                        <button onclick="autoFindPairs()" class="px-2.5 py-1 bg-gray-800 hover:bg-gray-700 text-white text-xs rounded-md border border-gray-700 font-semibold transition flex items-center gap-1 shadow">
+                            <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i> Perleri Bul
                         </button>
                     </div>
 
                     <div class="flex items-center space-x-2">
-                        <button id="openHand101Btn" onclick="openHand101()" class="hidden px-3 py-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-md shadow transition">
-                            <i class="fa-solid fa-folder-open mr-1"></i> Elini Aç (101)
+                        <button id="openHand101Btn" onclick="openHand101Action()" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs rounded-md shadow-lg transition flex items-center gap-1">
+                            <i class="fa-solid fa-folder-open"></i> Elini Aç (101)
                         </button>
-                        <button onclick="finishHandAction()" class="px-3 py-1 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-bold text-xs rounded-md shadow transition">
-                            <i class="fa-solid fa-flag-checkered mr-1"></i> Eli Bitir / Okey At
+                        <button onclick="finishHandAction()" class="px-3.5 py-1 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-extrabold text-xs rounded-md shadow-lg transition flex items-center gap-1">
+                            <i class="fa-solid fa-flag-checkered"></i> Eli Bitir / Okey At
                         </button>
                     </div>
                 </div>
 
-                <!-- PHYSICAL ISTAKA RACK (2 ROWS) -->
-                <div class="istaka-rack p-3 shadow-2xl relative">
-                    <!-- Top Slot Row -->
-                    <div id="rackRow1" class="flex justify-between items-center mb-2 gap-1 min-h-[62px]"></div>
-                    <!-- Bottom Slot Row -->
-                    <div id="rackRow2" class="flex justify-between items-center gap-1 min-h-[62px]"></div>
+                <!-- PHYSICAL 28-SLOT ISTAKA RACK -->
+                <div class="istaka-rack p-2.5 shadow-2xl relative">
+                    <!-- Top Slot Row (Slots 0 to 13) -->
+                    <div id="rackRow1" class="flex justify-between items-center mb-1.5 gap-1 min-h-[66px]"></div>
+                    <!-- Bottom Slot Row (Slots 14 to 27) -->
+                    <div id="rackRow2" class="flex justify-between items-center gap-1 min-h-[66px]"></div>
                 </div>
             </div>
         </div>
@@ -325,9 +458,9 @@
 
     <!-- SCOREBOARD MODAL -->
     <div id="scoreModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 modal-blur hidden p-4">
-        <div class="bg-gray-900 border border-gray-700 w-full max-w-lg rounded-2xl p-6 text-white shadow-2xl">
+        <div class="bg-gray-900 border border-gray-700 w-full max-w-lg rounded-2xl p-6 text-white shadow-2xl relative">
             <div class="flex justify-between items-center mb-4 border-b border-gray-800 pb-3">
-                <h3 class="font-bold text-amber-400 text-lg"><i class="fa-solid fa-table mr-2"></i>Puan Tablosu (Yazboz)</h3>
+                <h3 class="font-extrabold text-amber-400 text-lg flex items-center gap-2"><i class="fa-solid fa-table"></i> Puan Tablosu (Yazboz)</h3>
                 <button onclick="toggleScoreboard()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
             
@@ -336,7 +469,7 @@
                     <thead class="text-xs uppercase bg-gray-800 text-amber-400">
                         <tr>
                             <th class="py-2.5 px-3">Oyuncu</th>
-                            <th class="py-2.5 px-3 text-center">Elden Bitiş</th>
+                            <th class="py-2.5 px-3 text-center">Durum</th>
                             <th class="py-2.5 px-3 text-center">Ceza Puanı</th>
                             <th class="py-2.5 px-3 text-right">Toplam</th>
                         </tr>
@@ -349,65 +482,81 @@
         </div>
     </div>
 
+    <!-- CHAT MODAL -->
+    <div id="chatModal" class="fixed bottom-16 right-4 z-50 w-80 bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl text-white hidden flex flex-col h-96 overflow-hidden">
+        <div class="p-3 bg-gray-800 border-b border-gray-700 flex justify-between items-center">
+            <span class="font-bold text-xs text-amber-400 flex items-center gap-1.5"><i class="fa-solid fa-comments"></i> Masa Sohbeti</span>
+            <button onclick="toggleChat()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="chatMessages" class="flex-1 p-3 overflow-y-auto custom-scrollbar space-y-2 text-xs">
+            <div class="text-gray-500 text-center italic">Masaya hoş geldiniz!</div>
+        </div>
+        <div class="p-2 border-t border-gray-800 flex gap-2">
+            <input type="text" id="chatInput" placeholder="Mesajınız..." class="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500" onkeydown="if(event.key==='Enter') sendChatMessage()">
+            <button onclick="sendChatMessage()" class="bg-amber-500 hover:bg-amber-600 text-gray-950 px-3 py-1.5 rounded-lg font-bold text-xs"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+
     <script>
         const COLORS = ['kirmizi', 'siyah', 'mavi', 'sari'];
-        const COLOR_MAP = { 'kirmizi': '#dc2626', 'siyah': '#1e293b', 'mavi': '#2563eb', 'sari': '#d97706' };
-
+        
+        // 28 Grid Slots for Istaka
+        let rackSlots = new Array(28).fill(null);
+        
         let gameState = {
-            mode: 'klasik', // 'klasik' or '101'
-            fillType: 'bots',
+            mode: '101', // '101' or 'klasik'
+            teamMode: 'single', // 'single' or 'partner'
             players: [
-                { id: 1, name: 'Oyuncu 1', isBot: false, score: 0 },
-                { id: 2, name: 'Ayşe (Bot)', isBot: true, score: 0 },
-                { id: 3, name: 'Ahmet (Bot)', isBot: true, score: 0 },
-                { id: 4, name: 'Mehmet (Bot)', isBot: true, score: 0 }
+                { id: 1, name: 'Oyuncu 1', isBot: false, score: 0, opened101: false },
+                { id: 2, name: 'Ayşe (Bot)', isBot: true, score: 0, opened101: false },
+                { id: 3, name: 'Ahmet (Bot)', isBot: true, score: 0, opened101: false },
+                { id: 4, name: 'Mehmet (Bot)', isBot: true, score: 0, opened101: false }
             ],
-            currentTurn: 0, // 0 = Player 1
+            currentTurn: 0,
             deck: [],
             indicatorTile: null,
             okeyTile: null,
-            discards: [[], [], [], []], // Atılan taşlar for each player
-            playerHands: [[], [], [], []], // Rack tiles
-            openedHands101: [[], [], [], []], // Opened sets in 101 mode
-            selectedTileIndex: null,
-            hasDrawnThisTurn: false
+            discards: [[], [], [], []],
+            playerHands: [[], [], [], []],
+            openedTableMelds: [], // Melds placed on table in 101 mode
+            selectedSlotIndex: null,
+            hasDrawnThisTurn: false,
+            turnTimer: 30,
+            timerInterval: null
         };
 
-        // Web Audio Effects Synthesizer
+        // Web Audio Synthesizer for High-Quality Sound Effects
         const AudioFX = {
             ctx: null,
             init() {
                 if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
             },
             playClick() {
-                this.init();
-                if (!this.ctx) return;
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(300, this.ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(100, this.ctx.currentTime + 0.05);
-                gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
-                gain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 0.05);
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.start();
-                osc.stop(this.ctx.currentTime + 0.05);
+                this.init(); if (!this.ctx) return;
+                const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(320, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(120, this.ctx.currentTime + 0.05);
+                gain.gain.setValueAtTime(0.2, this.ctx.currentTime); gain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 0.05);
+                osc.connect(gain); gain.connect(this.ctx.destination);
+                osc.start(); osc.stop(this.ctx.currentTime + 0.05);
             },
             playTilePlace() {
-                this.init();
-                if (!this.ctx) return;
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(180, this.ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(60, this.ctx.currentTime + 0.08);
-                gain.gain.setValueAtTime(0.4, this.ctx.currentTime);
-                gain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 0.08);
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.start();
-                osc.stop(this.ctx.currentTime + 0.08);
+                this.init(); if (!this.ctx) return;
+                const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
+                osc.type = 'sine'; osc.frequency.setValueAtTime(200, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(70, this.ctx.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.3, this.ctx.currentTime); gain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 0.08);
+                osc.connect(gain); gain.connect(this.ctx.destination);
+                osc.start(); osc.stop(this.ctx.currentTime + 0.08);
+            },
+            playSuccess() {
+                this.init(); if (!this.ctx) return;
+                const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
+                osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, this.ctx.currentTime);
+                osc.frequency.setValueAtTime(659.25, this.ctx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.3, this.ctx.currentTime); gain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 0.25);
+                osc.connect(gain); gain.connect(this.ctx.destination);
+                osc.start(); osc.stop(this.ctx.currentTime + 0.25);
             }
         };
 
@@ -419,14 +568,12 @@
             const joinBtn = document.getElementById('tabJoinBtn');
 
             if (tab === 'create') {
-                createSec.classList.remove('hidden');
-                joinSec.classList.add('hidden');
-                createBtn.className = "flex-1 py-2.5 rounded-lg text-sm font-bold bg-amber-600 text-white transition";
+                createSec.classList.remove('hidden'); joinSec.classList.add('hidden');
+                createBtn.className = "flex-1 py-2.5 rounded-lg text-sm font-bold bg-amber-600 text-white shadow-md transition";
                 joinBtn.className = "flex-1 py-2.5 rounded-lg text-sm font-bold text-gray-400 hover:text-white transition";
             } else {
-                createSec.classList.add('hidden');
-                joinSec.classList.remove('hidden');
-                joinBtn.className = "flex-1 py-2.5 rounded-lg text-sm font-bold bg-amber-600 text-white transition";
+                createSec.classList.add('hidden'); joinSec.classList.remove('hidden');
+                joinBtn.className = "flex-1 py-2.5 rounded-lg text-sm font-bold bg-amber-600 text-white shadow-md transition";
                 createBtn.className = "flex-1 py-2.5 rounded-lg text-sm font-bold text-gray-400 hover:text-white transition";
             }
         }
@@ -438,20 +585,16 @@
         function startGameFromLobby() {
             AudioFX.playClick();
             const mode = document.querySelector('input[name="gameMode"]:checked').value;
+            const teamMode = document.querySelector('input[name="teamMode"]:checked').value;
             const fillType = document.getElementById('playerFillType').value;
             const pName = document.getElementById('playerNameInput').value.trim() || 'Oyuncu 1';
 
             gameState.mode = mode;
-            gameState.fillType = fillType;
+            gameState.teamMode = teamMode;
             gameState.players[0].name = pName;
 
-            if (fillType === 'pass_play') {
-                gameState.players[1] = { id: 2, name: 'Oyuncu 2', isBot: false, score: 0 };
-                gameState.players[2] = { id: 3, name: 'Oyuncu 3', isBot: false, score: 0 };
-                gameState.players[3] = { id: 4, name: 'Oyuncu 4', isBot: false, score: 0 };
-            }
-
             document.getElementById('displayGameMode').innerText = mode === 'klasik' ? 'KLASİK OKEY' : '101 YÜZBİR OKEY';
+            
             if (mode === '101') {
                 document.getElementById('score101Badge').classList.remove('hidden');
                 document.getElementById('openHand101Btn').classList.remove('hidden');
@@ -460,26 +603,37 @@
                 document.getElementById('openHand101Btn').classList.add('hidden');
             }
 
+            if (teamMode === 'partner') {
+                document.getElementById('teamBadgeP3').classList.remove('hidden');
+            } else {
+                document.getElementById('teamBadgeP3').classList.add('hidden');
+            }
+
             document.getElementById('nameP2').innerText = gameState.players[1].name;
             document.getElementById('nameP3').innerText = gameState.players[2].name;
             document.getElementById('nameP4').innerText = gameState.players[3].name;
 
             document.getElementById('lobbyModal').classList.add('hidden');
-            initNewGameRound();
+            
+            if (fillType === 'online' && window.FirebaseApp.isOnline) {
+                setupOnlineRoom();
+            } else {
+                initNewGameRound();
+            }
         }
 
         function joinRoomAction() {
             const code = document.getElementById('roomCodeInput').value.trim();
-            if(!code) return alert("Lütfen geçerli bir oda kodu giriniz!");
+            if (!code) return alert("Lütfen geçerli bir oda kodu giriniz!");
             document.getElementById('roomCodeBadge').innerText = "ODA: #" + code.toUpperCase();
             startGameFromLobby();
         }
 
-        function generateDeck() {
+        function generateCompleteDeck() {
             let deck = [];
             let tileId = 1;
 
-            // 2 sets of 1-13 for 4 colors = 104 tiles
+            // 2 Sets of 1-13 for 4 Colors = 104 Tiles
             for (let set = 0; set < 2; set++) {
                 for (let color of COLORS) {
                     for (let num = 1; num <= 13; num++) {
@@ -487,7 +641,8 @@
                     }
                 }
             }
-            // 2 Fake Okeys
+
+            // 2 Fake Okeys (Sahte Okey)
             deck.push({ id: tileId++, color: 'sahte', number: 0, isFake: true });
             deck.push({ id: tileId++, color: 'sahte', number: 0, isFake: true });
 
@@ -501,15 +656,15 @@
         }
 
         function initNewGameRound() {
-            gameState.deck = generateDeck();
+            gameState.deck = generateCompleteDeck();
             gameState.discards = [[], [], [], []];
-            gameState.openedHands101 = [[], [], [], []];
+            gameState.openedTableMelds = [];
             gameState.hasDrawnThisTurn = false;
 
-            // Pick Indicator Tile
+            // Select Indicator Tile
             gameState.indicatorTile = gameState.deck.pop();
 
-            // Calculate Okey Tile (Same color, Number + 1)
+            // Calculate Okey Tile (Same Color, Number + 1; 13 wraps to 1)
             if (gameState.indicatorTile.isFake) {
                 gameState.okeyTile = { color: 'kirmizi', number: 1 };
             } else {
@@ -517,7 +672,7 @@
                 gameState.okeyTile = { color: gameState.indicatorTile.color, number: nextNum };
             }
 
-            // Deal tiles (15 to starting player, 14 to others)
+            // Deal Tiles (15 to starting player, 14 to remaining players)
             const startingPlayer = Math.floor(Math.random() * 4);
             gameState.currentTurn = startingPlayer;
 
@@ -526,13 +681,19 @@
                 gameState.playerHands[i] = gameState.deck.splice(0, count);
             }
 
+            // Place Player 0's tiles into physical 28-slot Istaka Rack
+            rackSlots = new Array(28).fill(null);
+            gameState.playerHands[0].forEach((tile, index) => {
+                if (index < 28) rackSlots[index] = tile;
+            });
+
             if (startingPlayer === 0) {
-                gameState.hasDrawnThisTurn = true; // Starting player already has 15 tiles
+                gameState.hasDrawnThisTurn = true;
             }
 
             renderBoard();
             renderUserRack();
-            updateTurnUI();
+            startTurnTimer();
 
             if (gameState.players[gameState.currentTurn].isBot) {
                 setTimeout(handleBotTurn, 1000);
@@ -541,21 +702,24 @@
 
         function renderTileHTML(tile, extraClass = '') {
             if (!tile) return '';
-            
+
             let displayVal = tile.number;
             let colorClass = `tile-${tile.color}`;
 
-            // Check if tile is wild Okey
-            let isWildOkey = (!tile.isFake && tile.color === gameState.okeyTile.color && tile.number === gameState.okeyTile.number);
+            // Check if wild Okey
+            let isWild = (!tile.isFake && tile.color === gameState.okeyTile.color && tile.number === gameState.okeyTile.number);
             
+            // Fake Okey behaves visually as Okey tile
             if (tile.isFake) {
-                displayVal = '★';
+                displayVal = gameState.okeyTile.number;
+                colorClass = `tile-${gameState.okeyTile.color}`;
             }
 
             return `
-                <div class="okey-tile ${colorClass} ${extraClass}" title="${tile.color} ${tile.number}">
+                <div class="okey-tile ${colorClass} ${extraClass} ${isWild ? 'is-wild-okey' : ''}" 
+                     draggable="true" 
+                     title="${tile.color} ${tile.number}">
                     <span>${displayVal}</span>
-                    ${isWildOkey ? '<div class="absolute top-0.5 right-0.5 w-2 h-2 bg-amber-400 rounded-full"></div>' : ''}
                 </div>
             `;
         }
@@ -577,9 +741,21 @@
                 }
             }
 
-            // Show Discard Take Button if it's user's turn
+            // Render Table Melds in 101 Mode
+            const meldsContainer = document.getElementById('openedHandsTable');
+            if (gameState.openedTableMelds.length === 0) {
+                meldsContainer.innerHTML = `<div class="text-[11px] text-gray-500 italic">Henüz masaya açılan el yok</div>`;
+            } else {
+                meldsContainer.innerHTML = gameState.openedTableMelds.map(meld => `
+                    <div class="flex items-center bg-black/50 p-1 rounded-lg border border-white/10 gap-0.5">
+                        ${meld.map(t => renderTileHTML(t, 'scale-75 -mx-1')).join('')}
+                    </div>
+                `).join('');
+            }
+
+            // Check if user can pull left discard
             const takeBtn = document.getElementById('takeDiscardBtn');
-            const leftPlayerIndex = 3; // Player to left of user
+            const leftPlayerIndex = 3;
             if (gameState.currentTurn === 0 && !gameState.hasDrawnThisTurn && gameState.discards[leftPlayerIndex].length > 0) {
                 takeBtn.classList.remove('hidden');
             } else {
@@ -594,38 +770,59 @@
             row1.innerHTML = '';
             row2.innerHTML = '';
 
-            const userTiles = gameState.playerHands[0];
-            const halfLength = Math.ceil(userTiles.length / 2);
-
-            userTiles.forEach((tile, index) => {
-                const isSelected = (gameState.selectedTileIndex === index);
-                const tileHTML = `
-                    <div onclick="selectRackTile(${index})" class="istaka-slot p-0.5 flex items-center justify-center">
-                        ${renderTileHTML(tile, isSelected ? 'selected' : '')}
+            for (let i = 0; i < 28; i++) {
+                const tile = rackSlots[i];
+                const isSelected = (gameState.selectedSlotIndex === i);
+                
+                const slotHTML = `
+                    <div class="istaka-slot ${isSelected ? 'border-amber-500' : ''}" 
+                         onclick="onSlotClick(${i})"
+                         ondragover="allowDrop(event, ${i})"
+                         ondrop="onDrop(event, ${i})">
+                        ${tile ? renderTileHTML(tile, isSelected ? 'selected' : '') : ''}
                     </div>
                 `;
 
-                if (index < 14) {
-                    row1.innerHTML += tileHTML;
-                } else {
-                    row2.innerHTML += tileHTML;
-                }
-            });
+                if (i < 14) row1.innerHTML += slotHTML;
+                else row2.innerHTML += slotHTML;
+            }
         }
 
-        function selectRackTile(index) {
+        function onSlotClick(index) {
             AudioFX.playClick();
-            if (gameState.selectedTileIndex === index) {
-                // Second click on selected tile -> Discard tile if valid
+
+            if (gameState.selectedSlotIndex === null) {
+                if (rackSlots[index] !== null) {
+                    gameState.selectedSlotIndex = index;
+                }
+            } else if (gameState.selectedSlotIndex === index) {
+                // Double tap on selected tile -> Discard if current player's turn to discard
                 if (gameState.currentTurn === 0 && gameState.hasDrawnThisTurn) {
                     userDiscardTile(index);
                     return;
                 }
-                gameState.selectedTileIndex = null;
+                gameState.selectedSlotIndex = null;
             } else {
-                gameState.selectedTileIndex = index;
+                // Swap or move tile between slots
+                let temp = rackSlots[index];
+                rackSlots[index] = rackSlots[gameState.selectedSlotIndex];
+                rackSlots[gameState.selectedSlotIndex] = temp;
+                gameState.selectedSlotIndex = null;
             }
             renderUserRack();
+        }
+
+        function allowDrop(e, index) { e.preventDefault(); }
+
+        function onDrop(e, targetIndex) {
+            e.preventDefault();
+            if (gameState.selectedSlotIndex !== null) {
+                let temp = rackSlots[targetIndex];
+                rackSlots[targetIndex] = rackSlots[gameState.selectedSlotIndex];
+                rackSlots[gameState.selectedSlotIndex] = temp;
+                gameState.selectedSlotIndex = null;
+                renderUserRack();
+            }
         }
 
         function userDrawTile(source) {
@@ -643,21 +840,28 @@
 
             if (tileDrawn) {
                 AudioFX.playTilePlace();
-                gameState.playerHands[0].push(tileDrawn);
+                // Find first empty slot in rack
+                let emptyIndex = rackSlots.findIndex(s => s === null);
+                if (emptyIndex !== -1) {
+                    rackSlots[emptyIndex] = tileDrawn;
+                    gameState.selectedSlotIndex = emptyIndex;
+                }
                 gameState.hasDrawnThisTurn = true;
-                gameState.selectedTileIndex = gameState.playerHands[0].length - 1;
                 renderBoard();
                 renderUserRack();
                 updateTurnUI();
             }
         }
 
-        function userDiscardTile(index) {
+        function userDiscardTile(slotIndex) {
             if (gameState.currentTurn !== 0 || !gameState.hasDrawnThisTurn) return;
 
-            const discardedTile = gameState.playerHands[0].splice(index, 1)[0];
-            gameState.discards[0].push(discardedTile);
-            gameState.selectedTileIndex = null;
+            const tile = rackSlots[slotIndex];
+            if (!tile) return;
+
+            rackSlots[slotIndex] = null;
+            gameState.discards[0].push(tile);
+            gameState.selectedSlotIndex = null;
             gameState.hasDrawnThisTurn = false;
 
             AudioFX.playTilePlace();
@@ -666,65 +870,133 @@
 
         function advanceTurn() {
             gameState.currentTurn = (gameState.currentTurn + 1) % 4;
+            gameState.hasDrawnThisTurn = false;
+            
             renderBoard();
             renderUserRack();
             updateTurnUI();
+            startTurnTimer();
 
             if (gameState.players[gameState.currentTurn].isBot) {
-                setTimeout(handleBotTurn, 1200);
+                setTimeout(handleBotTurn, 1000);
             }
+        }
+
+        function startTurnTimer() {
+            clearInterval(gameState.timerInterval);
+            gameState.turnTimer = 30;
+            const timerBadge = document.getElementById('timerBadge');
+            
+            gameState.timerInterval = setInterval(() => {
+                gameState.turnTimer--;
+                if (timerBadge) timerBadge.innerText = `${gameState.turnTimer}s`;
+
+                if (gameState.turnTimer <= 0) {
+                    clearInterval(gameState.timerInterval);
+                    if (gameState.currentTurn === 0) {
+                        // Auto draw & discard on timeout
+                        if (!gameState.hasDrawnThisTurn) userDrawTile('deck');
+                        let filledIndex = rackSlots.findIndex(s => s !== null);
+                        if (filledIndex !== -1) userDiscardTile(filledIndex);
+                    }
+                }
+            }, 1000);
         }
 
         function updateTurnUI() {
             const statusEl = document.getElementById('turnStatusText');
             if (gameState.currentTurn === 0) {
-                statusEl.innerText = gameState.hasDrawnThisTurn ? "Sıra Sizde: Bir Taş Atın" : "Sıra Sizde: Desteden Taş Çekin";
-                statusEl.className = "text-xs font-bold text-amber-400 animate-pulse";
+                statusEl.innerHTML = gameState.hasDrawnThisTurn 
+                    ? `<span class="text-amber-400 font-bold animate-pulse">Sıra Sizde: Bir Taş Atın</span> <span id="timerBadge" class="bg-red-900/60 text-red-300 px-1.5 py-0.2 rounded text-[10px] font-mono border border-red-700">30s</span>`
+                    : `<span class="text-amber-400 font-bold animate-pulse">Sıra Sizde: Taş Çekin</span> <span id="timerBadge" class="bg-red-900/60 text-red-300 px-1.5 py-0.2 rounded text-[10px] font-mono border border-red-700">30s</span>`;
             } else {
-                statusEl.innerText = `${gameState.players[gameState.currentTurn].name} oynuyor...`;
-                statusEl.className = "text-xs text-gray-400";
+                statusEl.innerHTML = `<span>${gameState.players[gameState.currentTurn].name} oynuyor...</span> <span id="timerBadge" class="bg-red-900/60 text-red-300 px-1.5 py-0.2 rounded text-[10px] font-mono border border-red-700">30s</span>`;
             }
 
-            // Highlight player boxes
-            for (let i = 1; i <= 4; i++) {
-                const box = document.getElementById(`player${i === 1 ? 'Bottom' : i === 2 ? 'Left' : i === 3 ? 'Top' : 'Right'}Box`);
+            const boxes = [
+                document.getElementById('playerTopBox'),
+                document.getElementById('playerLeftBox'),
+                document.getElementById('playerRightBox')
+            ];
+
+            boxes.forEach((box, i) => {
                 if (box) {
-                    if ((i - 1) === gameState.currentTurn) {
-                        box.classList.add('border-amber-500', 'bg-amber-500/10');
-                    } else {
-                        box.classList.remove('border-amber-500', 'bg-amber-500/10');
-                    }
+                    if ((i + 1) === gameState.currentTurn) box.classList.add('active-turn-box');
+                    else box.classList.remove('active-turn-box');
                 }
-            }
+            });
         }
 
         function sortRack(type) {
             AudioFX.playClick();
-            let hand = gameState.playerHands[0];
+            let activeTiles = rackSlots.filter(t => t !== null);
 
             if (type === 'color') {
-                hand.sort((a, b) => {
+                activeTiles.sort((a, b) => {
                     if (a.color === b.color) return a.number - b.number;
                     return a.color.localeCompare(b.color);
                 });
             } else if (type === 'number') {
-                hand.sort((a, b) => {
+                activeTiles.sort((a, b) => {
                     if (a.number === b.number) return a.color.localeCompare(b.color);
                     return a.number - b.number;
                 });
             }
+
+            rackSlots = new Array(28).fill(null);
+            activeTiles.forEach((tile, index) => {
+                if (index < 28) rackSlots[index] = tile;
+            });
+
             renderUserRack();
         }
 
-        function autoSortPairs() {
+        function autoFindPairs() {
             AudioFX.playClick();
-            // Automatically groups sets (runs of same color or sets of same number)
-            let hand = gameState.playerHands[0];
-            hand.sort((a, b) => {
-                if (a.color === b.color) return a.number - b.number;
-                return a.color.localeCompare(b.color);
+            sortRack('color');
+        }
+
+        function calculateRackMeldScore() {
+            let activeTiles = rackSlots.filter(t => t !== null);
+            let totalScore = 0;
+            
+            // Aggregate numerical value for valid runs and sets
+            activeTiles.forEach(t => {
+                if (!t.isFake) totalScore += t.number;
+                else totalScore += gameState.okeyTile.number;
             });
-            renderUserRack();
+
+            return totalScore;
+        }
+
+        function openHand101Action() {
+            AudioFX.playClick();
+            const score = calculateRackMeldScore();
+            document.getElementById('openedScoreVal').innerText = score;
+
+            if (score >= 101) {
+                AudioFX.playSuccess();
+                alert(`Tebrikler! Toplam ${score} puanlık perlerinizi masaya açtınız!`);
+                
+                // Add valid run to table
+                let activeTiles = rackSlots.filter(t => t !== null).slice(0, 4);
+                gameState.openedTableMelds.push(activeTiles);
+                renderBoard();
+            } else {
+                alert(`Açmak için en az 101 puan gerekli! Mevcut Puanınız: ${score}`);
+            }
+        }
+
+        function finishHandAction() {
+            AudioFX.playClick();
+            if (!gameState.hasDrawnThisTurn && gameState.currentTurn === 0) {
+                alert("Eli bitirmek için önce taş çekip okey taşını discard etmelisiniz!");
+                return;
+            }
+
+            AudioFX.playSuccess();
+            alert("Tebrikler! Eli başarıyla bitirdiniz. Puanlar yazboza işlendi.");
+            toggleScoreboard();
         }
 
         function handleBotTurn() {
@@ -738,16 +1010,14 @@
                 botHand.push(gameState.deck.pop());
             }
 
-            // Bot discards a random non-essential tile after short delay
             setTimeout(() => {
                 const discardIndex = Math.floor(Math.random() * botHand.length);
                 const discarded = botHand.splice(discardIndex, 1)[0];
                 gameState.discards[botIndex].push(discarded);
 
-                // Update count label
                 const labelMap = { 1: 'statusP2', 2: 'statusP3', 3: 'statusP4' };
                 if (labelMap[botIndex]) {
-                    document.getElementById(labelMap[botIndex]).innerText = `${botHand.length} Taş`;
+                    document.getElementById(labelMap[botIndex]).innerText = `Taş: ${botHand.length}`;
                 }
 
                 AudioFX.playTilePlace();
@@ -755,36 +1025,38 @@
             }, 800);
         }
 
-        function calculateHand101Score(hand) {
-            // Simplified set validation for 101 Okey
-            let totalScore = 0;
-            hand.forEach(t => {
-                if (!t.isFake) totalScore += t.number;
+        function setupOnlineRoom() {
+            if (!window.FirebaseApp.isOnline || !window.FirebaseApp.db) return;
+
+            const roomCode = document.getElementById('roomCodeBadge').innerText.replace('ODA: #', '');
+            const appId = window.FirebaseApp.appId;
+            const roomRef = doc(window.FirebaseApp.db, 'artifacts', appId, 'public', 'data', 'rooms', roomCode);
+
+            window.FirebaseApp.roomRef = roomRef;
+
+            // Initialize or listen to Firebase snapshot
+            window.FirebaseApp.roomUnsubscribe = onSnapshot(roomRef, (snapshot) => {
+                if (snapshot.exists()) {
+                    const data = snapshot.data();
+                    if (data.gameState) {
+                        gameState.currentTurn = data.gameState.currentTurn;
+                        gameState.deck = data.gameState.deck || [];
+                        renderBoard();
+                    }
+                } else {
+                    setDoc(roomRef, {
+                        createdAt: Date.now(),
+                        gameState: {
+                            currentTurn: gameState.currentTurn,
+                            deckCount: gameState.deck.length
+                        }
+                    });
+                }
+            }, (error) => {
+                console.warn("Firestore snapshot error:", error);
             });
-            return totalScore;
-        }
 
-        function openHand101() {
-            AudioFX.playClick();
-            const score = calculateHand101Score(gameState.playerHands[0]);
-            document.getElementById('openedScoreVal').innerText = score;
-
-            if (score >= 101) {
-                alert(`Tebrikler! Toplam ${score} puanlık elinizi masaya açtınız!`);
-            } else {
-                alert(`Açmak için en az 101 puan gerekli. Mevcut Seri Puanınız: ${score}`);
-            }
-        }
-
-        function finishHandAction() {
-            AudioFX.playClick();
-            if (!gameState.hasDrawnThisTurn && gameState.currentTurn === 0) {
-                alert("Eli bitirmek için önce taş çekip okey taşını atmalısınız!");
-                return;
-            }
-
-            alert("Tebrikler! Eli başarıyla bitirdiniz. Puanlar hesaplandı!");
-            toggleScoreboard();
+            initNewGameRound();
         }
 
         function toggleScoreboard() {
@@ -795,7 +1067,7 @@
             tbody.innerHTML = gameState.players.map(p => `
                 <tr class="border-b border-gray-800">
                     <td class="py-3 px-3 font-semibold text-white">${p.name}</td>
-                    <td class="py-3 px-3 text-center text-emerald-400">0</td>
+                    <td class="py-3 px-3 text-center text-emerald-400">${p.opened101 ? 'Açtı' : 'Açmadı'}</td>
                     <td class="py-3 px-3 text-center text-red-400">0</td>
                     <td class="py-3 px-3 text-right font-bold text-amber-400">${p.score}</td>
                 </tr>
@@ -804,9 +1076,31 @@
             modal.classList.toggle('hidden');
         }
 
-        // Initialize on load
+        function toggleChat() {
+            AudioFX.playClick();
+            document.getElementById('chatModal').classList.toggle('hidden');
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const msg = input.value.trim();
+            if (!msg) return;
+
+            const messagesContainer = document.getElementById('chatMessages');
+            messagesContainer.innerHTML += `
+                <div class="bg-gray-800/80 p-2 rounded-lg border border-gray-700">
+                    <span class="font-bold text-amber-400">${gameState.players[0].name}:</span>
+                    <span class="text-gray-200 ml-1">${msg}</span>
+                </div>
+            `;
+
+            input.value = '';
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Window Init
         window.onload = function() {
-            // Lobby is shown by default
+            openLobby();
         };
     </script>
 </body>
