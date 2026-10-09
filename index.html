@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VIP Okey & 101 Salonu - Canlı Çok Oyunculu</title>
-    
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- FontAwesome & Fonts -->
+
+    <!-- FontAwesome & Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <style>
         body {
@@ -22,26 +22,44 @@
             overflow: hidden;
         }
 
+        /* 3D Felt Table */
         .felt-table {
-            background: radial-gradient(circle at center, #1b5e20 0%, #0d3b13 70%, #051a07 100%);
-            box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.85);
-            border: 14px solid #3a1d0d;
+            background: radial-gradient(circle at center, #1e6b27 0%, #0f4016 70%, #051a08 100%);
+            box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.9);
+            border: 14px solid #3d1e0d;
             border-radius: 28px;
         }
 
         .wood-border {
-            background: linear-gradient(135deg, #42230e 0%, #221005 50%, #42230e 100%);
-            box-shadow: inset 0 0 12px rgba(0,0,0,0.9), 0 20px 40px rgba(0,0,0,0.8);
+            background: linear-gradient(135deg, #4d2811 0%, #291307 50%, #4d2811 100%);
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.9), 0 20px 40px rgba(0,0,0,0.85);
         }
 
-        /* 3D Tile Visuals */
+        /* Physical Wooden Istaka Rack */
+        .istaka-wooden-rack {
+            background: linear-gradient(180deg, #6c3b18 0%, #47240c 35%, #2e1505 100%);
+            border-radius: 12px;
+            border-top: 3px solid #8e5025;
+            border-bottom: 5px solid #1a0a02;
+            box-shadow: 0 16px 35px rgba(0,0,0,0.85), inset 0 2px 4px rgba(255,255,255,0.25);
+            position: relative;
+        }
+
+        .istaka-row-bevel {
+            background: rgba(0, 0, 0, 0.45);
+            border-radius: 8px;
+            box-shadow: inset 0 3px 6px rgba(0,0,0,0.8), 0 1px 1px rgba(255,255,255,0.1);
+            padding: 4px;
+        }
+
+        /* Realistic Okey Tile Visuals */
         .okey-tile {
             width: 44px;
-            height: 60px;
-            background: linear-gradient(145deg, #ffffff 0%, #f3ebd7 100%);
-            border-radius: 7px;
-            border-bottom: 5px solid #bd9b64;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.9);
+            height: 62px;
+            background: linear-gradient(145deg, #ffffff 0%, #f7f1e1 85%, #e0d1b3 100%);
+            border-radius: 6px;
+            border-bottom: 5px solid #b3925d;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.6), inset 0 1px 2px rgba(255,255,255,0.95);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -50,9 +68,10 @@
             font-size: 22px;
             line-height: 1;
             cursor: grab;
-            transition: transform 0.12s cubic-bezier(0.1, 0.7, 0.1, 1), box-shadow 0.12s ease;
+            transition: transform 0.12s ease, box-shadow 0.12s ease;
             position: relative;
             flex-shrink: 0;
+            user-select: none;
         }
 
         .okey-tile:active {
@@ -60,13 +79,13 @@
         }
 
         .okey-tile.selected {
-            transform: translateY(-14px) scale(1.06);
+            transform: translateY(-16px) scale(1.08);
             border: 2px solid #3b82f6;
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.9), 0 10px 15px rgba(0,0,0,0.5);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.9), 0 12px 20px rgba(0,0,0,0.6);
             z-index: 40;
         }
 
-        .okey-tile.okey-indicator-glow {
+        .okey-tile.okey-glow {
             box-shadow: 0 0 16px #f59e0b, 0 0 6px #f59e0b inset;
             border: 2px solid #f59e0b;
         }
@@ -83,41 +102,34 @@
             box-shadow: 0 0 6px #f59e0b;
         }
 
-        /* Color Schemes */
+        /* Tile Color Palette */
         .tile-kirmizi { color: #dc2626; }
         .tile-siyah { color: #111827; }
         .tile-mavi { color: #2563eb; }
         .tile-sari { color: #d97706; }
         .tile-sahte { color: #7c3aed; }
 
-        /* Physical Rack Styling */
-        .istaka-rack {
-            background: linear-gradient(180deg, #573117 0%, #311a0b 100%);
-            border-radius: 14px;
-            border: 2px solid #784420;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.8), inset 0 2px 4px rgba(255,255,255,0.2);
-        }
-
+        /* Slots */
         .istaka-slot {
             width: 48px;
-            height: 64px;
-            background: rgba(0, 0, 0, 0.35);
+            height: 66px;
+            background: rgba(0, 0, 0, 0.25);
             border-radius: 6px;
-            border: 1px dashed rgba(255, 255, 255, 0.1);
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.7);
+            border: 1px dashed rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.6);
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.15s ease;
+            transition: background 0.15s ease, border-color 0.15s ease;
         }
 
         .istaka-slot.drag-over {
-            background: rgba(245, 158, 11, 0.25);
+            background: rgba(245, 158, 11, 0.3);
             border-color: #f59e0b;
         }
 
         .modal-blur {
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
         }
 
         .custom-scrollbar::-webkit-scrollbar {
@@ -131,36 +143,29 @@
             border-radius: 3px;
         }
 
-        @keyframes turnPulse {
+        @keyframes turnGlow {
             0%, 100% { border-color: rgba(245, 158, 11, 0.4); box-shadow: 0 0 10px rgba(245, 158, 11, 0.2); }
-            50% { border-color: rgba(245, 158, 11, 1); box-shadow: 0 0 25px rgba(245, 158, 11, 0.7); }
+            50% { border-color: rgba(245, 158, 11, 1); box-shadow: 0 0 25px rgba(245, 158, 11, 0.8); }
         }
 
-        .active-turn-box {
-            animation: turnPulse 1.8s infinite;
+        .active-turn-card {
+            animation: turnGlow 1.8s infinite;
         }
     </style>
 
-    <!-- Firebase Modular Imports -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, onSnapshot, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Global Firebase state container
         window.FirebaseApp = {
-            app: null,
-            auth: null,
-            db: null,
-            user: null,
-            appId: typeof __app_id !== 'undefined' ? __app_id : 'okey-pro-v1',
-            isOnline: false,
-            roomRef: null,
-            roomUnsubscribe: null
+            app: null, auth: null, db: null, user: null,
+            appId: typeof __app_id !== 'undefined' ? __app_id : 'okey-pro-v2',
+            isOnline: false, roomRef: null, roomUnsubscribe: null
         };
 
-        const firebaseConfig = typeof __firebase_config !== 'undefined' 
-            ? JSON.parse(__firebase_config) 
+        const firebaseConfig = typeof __firebase_config !== 'undefined'
+            ? JSON.parse(__firebase_config)
             : {
                 apiKey: "AIzaSyDemoKeyPlaceholderForLocal",
                 authDomain: "demo-okey.firebaseapp.com",
@@ -186,102 +191,174 @@
                 if (u) {
                     window.FirebaseApp.user = u;
                     window.FirebaseApp.isOnline = true;
-                    console.log("Firebase Auth Authenticated:", u.uid);
                     if (window.onAuthReady) window.onAuthReady(u);
                 }
             });
         } catch (e) {
-            console.warn("Firebase fallback mode activated (Offline AI mode available):", e);
+            console.warn("Firebase running in offline standalone mode:", e);
         }
     </script>
 </head>
 <body class="h-full w-full flex flex-col justify-between p-2 select-none overflow-hidden">
 
-    <!-- LOBBY & ROOM MANAGEMENT MODAL -->
+    <!-- LOBBY & WAITING ROOM MODAL -->
     <div id="lobbyModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/85 modal-blur p-4">
-        <div class="bg-gray-900 border border-amber-500/30 w-full max-w-xl rounded-2xl p-6 shadow-2xl text-white relative overflow-hidden">
-            <div class="absolute -top-10 -right-10 w-40 h-40 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
-            
-            <div class="text-center mb-6">
+        <div class="bg-gray-900 border border-amber-500/40 w-full max-w-2xl rounded-2xl p-6 shadow-2xl text-white relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="text-center mb-5">
                 <h1 class="font-['Cinzel'] text-4xl font-extrabold text-amber-500 tracking-wider mb-1 flex items-center justify-center gap-3">
-                    <i class="fa-solid fa-crown text-amber-400"></i> VIP OKEY 101
+                    <i class="fa-solid fa-crown text-amber-400"></i> VIP OKEY & 101 SALONU
                 </h1>
-                <p class="text-gray-400 text-xs font-semibold uppercase tracking-widest">Canlı Çok Oyunculu & Yapay Zeka Salonu</p>
+                <p class="text-gray-400 text-xs font-semibold uppercase tracking-widest">Canlı Çok Oyunculu Oda & Eşli Masa Yönetimi</p>
             </div>
 
-            <!-- Tab Buttons -->
-            <div class="flex bg-gray-800/80 p-1 rounded-xl mb-6 border border-gray-700/50">
-                <button id="tabCreateBtn" onclick="switchLobbyTab('create')" class="flex-1 py-2.5 rounded-lg text-sm font-bold bg-amber-600 text-white shadow-md transition">Oda Kur</button>
-                <button id="tabJoinBtn" onclick="switchLobbyTab('join')" class="flex-1 py-2.5 rounded-lg text-sm font-bold text-gray-400 hover:text-white transition">Odaya Katıl</button>
+            <!-- Tab Navigation -->
+            <div id="lobbyTabContainer" class="flex bg-gray-800/80 p-1 rounded-xl mb-5 border border-gray-700/50">
+                <button id="tabCreateBtn" onclick="switchLobbyTab('create')" class="flex-1 py-2 rounded-lg text-sm font-bold bg-amber-600 text-white shadow-md transition">Oda Kur (Kurucu)</button>
+                <button id="tabJoinBtn" onclick="switchLobbyTab('join')" class="flex-1 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-white transition">Odaya Katıl</button>
             </div>
 
-            <!-- Create Room Form -->
+            <!-- SECTION 1: CREATE ROOM CONFIG -->
             <div id="createRoomSection" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Oyun Modu</label>
-                    <div class="grid grid-cols-2 gap-3">
-                        <label class="cursor-pointer">
-                            <input type="radio" name="gameMode" value="101" checked class="peer hidden">
-                            <div class="p-3.5 border border-gray-700 rounded-xl bg-gray-800/50 peer-checked:border-amber-500 peer-checked:bg-amber-500/10 text-center transition">
-                                <div class="font-bold text-amber-400 text-sm">101 Yüzbir Okey</div>
-                                <div class="text-[11px] text-gray-400 mt-1">101 Barajı & Çift Açma</div>
-                            </div>
-                        </label>
-                        <label class="cursor-pointer">
-                            <input type="radio" name="gameMode" value="klasik" class="peer hidden">
-                            <div class="p-3.5 border border-gray-700 rounded-xl bg-gray-800/50 peer-checked:border-amber-500 peer-checked:bg-amber-500/10 text-center transition">
-                                <div class="font-bold text-amber-400 text-sm">Klasik Okey</div>
-                                <div class="text-[11px] text-gray-400 mt-1">Klasik 14 Taş Bitişli</div>
-                            </div>
-                        </label>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Oyun Türü</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="gameMode" value="101" checked class="peer hidden">
+                                <div class="p-3 border border-gray-700 rounded-xl bg-gray-800/50 peer-checked:border-amber-500 peer-checked:bg-amber-500/10 text-center transition">
+                                    <div class="font-bold text-amber-400 text-xs">101 Okey</div>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="gameMode" value="klasik" class="peer hidden">
+                                <div class="p-3 border border-gray-700 rounded-xl bg-gray-800/50 peer-checked:border-amber-500 peer-checked:bg-amber-500/10 text-center transition">
+                                    <div class="font-bold text-amber-400 text-xs">Klasik Okey</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Oyun Modu</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="teamMode" value="single" checked class="peer hidden" onchange="toggleTeamSelectUI()">
+                                <div class="p-3 border border-gray-700 rounded-xl bg-gray-800/50 peer-checked:border-amber-500 peer-checked:bg-amber-500/10 text-center transition">
+                                    <div class="font-bold text-gray-200 text-xs">Bireysel (Tekli)</div>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="teamMode" value="partner" class="peer hidden" onchange="toggleTeamSelectUI()">
+                                <div class="p-3 border border-gray-700 rounded-xl bg-gray-800/50 peer-checked:border-amber-500 peer-checked:bg-amber-500/10 text-center transition">
+                                    <div class="font-bold text-amber-400 text-xs">Eşli (2 v 2)</div>
+                                </div>
+                            </label>
+                        </div>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Eşlik Durumu</label>
-                    <div class="grid grid-cols-2 gap-3">
-                        <label class="cursor-pointer">
-                            <input type="radio" name="teamMode" value="single" checked class="peer hidden">
-                            <div class="p-2.5 border border-gray-700 rounded-xl bg-gray-800/50 peer-checked:border-amber-500 peer-checked:bg-amber-500/10 text-center transition text-xs font-bold text-gray-200">
-                                Tekli (Bireysel)
-                            </div>
-                        </label>
-                        <label class="cursor-pointer">
-                            <input type="radio" name="teamMode" value="partner" class="peer hidden">
-                            <div class="p-2.5 border border-gray-700 rounded-xl bg-gray-800/50 peer-checked:border-amber-500 peer-checked:bg-amber-500/10 text-center transition text-xs font-bold text-amber-400">
-                                Eşli Okey (2 v 2)
-                            </div>
-                        </label>
-                    </div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Kurucu Oyuncu Adı</label>
+                    <input type="text" id="hostPlayerName" value="Masa Sahibi" class="w-full bg-gray-800 border border-gray-700 rounded-xl p-2.5 text-sm text-white focus:outline-none focus:border-amber-500">
                 </div>
 
-                <div>
-                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Oyuncu Türü</label>
-                    <select id="playerFillType" class="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-sm focus:outline-none focus:border-amber-500 text-gray-200">
-                        <option value="bots">Tek Oyunculu (Eksik Yerlere Akıllı Botlar)</option>
-                        <option value="online">Online / Arkadaşlarla (Canlı Oda)</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Oyuncu Adınız</label>
-                    <input type="text" id="playerNameInput" value="Oyuncu 1" class="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500">
-                </div>
-
-                <button onclick="startGameFromLobby()" class="w-full py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 rounded-xl font-extrabold text-base shadow-lg transform transition active:scale-98 text-gray-950 flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-play"></i> Masayı Kur ve Başla
+                <button onclick="createWaitingRoomLobby()" class="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 rounded-xl font-extrabold text-sm shadow-lg text-gray-950 flex items-center justify-center gap-2 transition transform active:scale-98">
+                    <i class="fa-solid fa-square-plus"></i> Odayı Kur & Masayı Hazırla
                 </button>
             </div>
 
-            <!-- Join Room Form -->
+            <!-- SECTION 2: JOIN ROOM CONFIG -->
             <div id="joinRoomSection" class="space-y-4 hidden">
                 <div>
-                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Oda Kodu</label>
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Oyuncu Adınız</label>
+                    <input type="text" id="joinPlayerName" value="Oyuncu" class="w-full bg-gray-800 border border-gray-700 rounded-xl p-2.5 text-sm text-white focus:outline-none focus:border-amber-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Oda Kodu</label>
                     <input type="text" id="roomCodeInput" placeholder="Örn: OKY-8492" class="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-lg uppercase tracking-widest text-center font-mono focus:outline-none focus:border-amber-500 text-amber-400 font-bold">
                 </div>
-                <button onclick="joinRoomAction()" class="w-full py-3.5 bg-blue-600 hover:bg-blue-700 rounded-xl font-extrabold text-base shadow-lg transform transition active:scale-98 text-white flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-right-to-bracket"></i> Canlı Odaya Katıl
+                <button onclick="joinWaitingRoomAction()" class="w-full py-3 bg-blue-600 hover:bg-blue-700 rounded-xl font-extrabold text-sm shadow-lg text-white flex items-center justify-center gap-2 transition transform active:scale-98">
+                    <i class="fa-solid fa-right-to-bracket"></i> Masaya Katıl
                 </button>
+            </div>
+
+            <!-- SECTION 3: HOST WAITING LOBBY (DYNAMIC SEAT MANAGEMENT & PARTNER SELECTION) -->
+            <div id="waitingLobbySection" class="space-y-4 hidden">
+                <div class="bg-gray-800/90 border border-amber-500/30 rounded-xl p-3 flex items-center justify-between">
+                    <div>
+                        <span class="text-xs text-gray-400 font-semibold block">Oda Kodu & Davet Linki:</span>
+                        <span id="waitingRoomCodeBadge" class="font-mono text-lg font-extrabold text-amber-400">OKY-0000</span>
+                    </div>
+                    <button onclick="copyRoomLink()" class="px-3 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 rounded-lg text-amber-300 text-xs font-bold flex items-center gap-1.5 transition">
+                        <i class="fa-solid fa-copy"></i> Kodu / Linki Kopyala
+                    </button>
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="text-xs font-bold text-gray-300 uppercase tracking-wider">Masa Koltukları & Eş Seçimi</label>
+                        <span class="text-[11px] text-amber-400 italic">Eşli Modda: Koltuk 1 & 3 Eş, Koltuk 2 & 4 Eş olur.</span>
+                    </div>
+
+                    <!-- 4 Seats Display -->
+                    <div class="grid grid-cols-2 gap-3" id="seatsGrid">
+                        <!-- Seat 1 -->
+                        <div class="bg-gray-800/70 border border-gray-700 rounded-xl p-3 flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-8 h-8 bg-amber-500/20 text-amber-400 rounded-lg font-bold text-xs flex items-center justify-center">1</div>
+                                <div>
+                                    <div class="text-xs font-bold text-white" id="seatName1">Masa Sahibi (Siz)</div>
+                                    <div class="text-[10px] text-amber-300 font-semibold">Takım A (Ev Sahibi)</div>
+                                </div>
+                            </div>
+                            <span class="text-[10px] bg-emerald-900/60 text-emerald-300 border border-emerald-700 px-2 py-0.5 rounded">Hazır</span>
+                        </div>
+
+                        <!-- Seat 2 -->
+                        <div class="bg-gray-800/70 border border-gray-700 rounded-xl p-3 flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-8 h-8 bg-blue-500/20 text-blue-400 rounded-lg font-bold text-xs flex items-center justify-center">2</div>
+                                <div>
+                                    <div class="text-xs font-bold text-gray-300" id="seatName2">Boş (Bekleniyor)</div>
+                                    <div class="text-[10px] text-blue-300 font-semibold">Takım B</div>
+                                </div>
+                            </div>
+                            <button onclick="toggleSeatBot(1)" class="text-[11px] bg-gray-700 hover:bg-gray-600 px-2.5 py-1 rounded-lg text-amber-300 font-semibold" id="seatBtn2">Bot Ekle</button>
+                        </div>
+
+                        <!-- Seat 3 -->
+                        <div class="bg-gray-800/70 border border-gray-700 rounded-xl p-3 flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-8 h-8 bg-amber-500/20 text-amber-400 rounded-lg font-bold text-xs flex items-center justify-center">3</div>
+                                <div>
+                                    <div class="text-xs font-bold text-gray-300" id="seatName3">Boş (Bekleniyor)</div>
+                                    <div class="text-[10px] text-amber-300 font-semibold">Takım A (Eşiniz)</div>
+                                </div>
+                            </div>
+                            <button onclick="toggleSeatBot(2)" class="text-[11px] bg-gray-700 hover:bg-gray-600 px-2.5 py-1 rounded-lg text-amber-300 font-semibold" id="seatBtn3">Bot Ekle</button>
+                        </div>
+
+                        <!-- Seat 4 -->
+                        <div class="bg-gray-800/70 border border-gray-700 rounded-xl p-3 flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-8 h-8 bg-blue-500/20 text-blue-400 rounded-lg font-bold text-xs flex items-center justify-center">4</div>
+                                <div>
+                                    <div class="text-xs font-bold text-gray-300" id="seatName4">Boş (Bekleniyor)</div>
+                                    <div class="text-[10px] text-blue-300 font-semibold">Takım B</div>
+                                </div>
+                            </div>
+                            <button onclick="toggleSeatBot(3)" class="text-[11px] bg-gray-700 hover:bg-gray-600 px-2.5 py-1 rounded-lg text-amber-300 font-semibold" id="seatBtn4">Bot Ekle</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="hostControlsFooter" class="pt-2">
+                    <button onclick="hostStartGameAction()" id="startGameHostBtn" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 rounded-xl font-black text-base shadow-xl text-white flex items-center justify-center gap-2 transition transform active:scale-98">
+                        <i class="fa-solid fa-play text-lg"></i> OYUNU BAŞLAT
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -298,7 +375,7 @@
                     <span id="roomCodeBadge" class="bg-gray-800 text-[11px] px-2 py-0.5 rounded border border-gray-700 text-amber-300 font-mono">ODA: #LOCAL</span>
                 </div>
                 <div class="text-xs text-gray-300 font-semibold flex items-center gap-2" id="turnStatusText">
-                    <span>Sıra sizde</span>
+                    <span>Masa kuruluyor...</span>
                     <span id="timerBadge" class="bg-red-900/60 text-red-300 px-1.5 py-0.2 rounded text-[10px] font-mono border border-red-700">30s</span>
                 </div>
             </div>
@@ -317,10 +394,9 @@
             </button>
             <button onclick="toggleChat()" class="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 rounded-lg text-xs font-semibold border border-gray-700 transition flex items-center gap-1.5 text-gray-200 relative">
                 <i class="fa-solid fa-comments text-amber-400"></i> Sohbet
-                <span id="chatBadge" class="hidden absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full"></span>
             </button>
             <button onclick="openLobby()" class="px-3 py-1.5 bg-red-900/50 hover:bg-red-800/60 text-red-200 rounded-lg text-xs font-semibold border border-red-700/50 transition flex items-center gap-1">
-                <i class="fa-solid fa-door-open"></i> Çık
+                <i class="fa-solid fa-door-open"></i> Menü
             </button>
         </div>
     </header>
@@ -332,10 +408,7 @@
         <!-- TOP PLAYER (P3 / BOT 2) -->
         <div class="relative z-10 flex flex-col items-center">
             <div id="playerTopBox" class="bg-gray-900/90 border border-gray-700 rounded-xl px-4 py-1.5 text-center text-white shadow-lg flex items-center space-x-3 transition">
-                <div class="relative">
-                    <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center font-bold text-xs shadow-md" id="avatarP3">P3</div>
-                    <div id="indicatorP3" class="hidden absolute -bottom-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-gray-900"></div>
-                </div>
+                <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center font-bold text-xs shadow-md" id="avatarP3">P3</div>
                 <div class="text-left">
                     <div class="text-xs font-extrabold flex items-center gap-1">
                         <span id="nameP3">Ahmet (Bot)</span>
@@ -390,7 +463,7 @@
                     </div>
                 </div>
 
-                <!-- TABLE OPENED MELLES DISPLAY CONTAINER (101 Mode Table Sets) -->
+                <!-- TABLE OPENED MELDS DISPLAY CONTAINER -->
                 <div id="openedHandsTable" class="w-full mt-2 bg-black/40 rounded-xl p-2 border border-white/5 max-h-[90px] overflow-y-auto custom-scrollbar flex flex-wrap gap-2 items-center justify-center min-h-[45px]">
                     <div class="text-[11px] text-gray-500 italic">Henüz masaya açılan el yok</div>
                 </div>
@@ -408,7 +481,7 @@
             </div>
         </div>
 
-        <!-- BOTTOM SECTION (CURRENT PLAYER ISTAKA & ACTION CONTROLS) -->
+        <!-- BOTTOM SECTION (CURRENT PLAYER ISTAKA RACK & ACTION CONTROLS) -->
         <div class="relative z-10 flex flex-col items-center w-full">
             <!-- Discard Zone for Player 1 -->
             <div class="mb-2 flex items-center space-x-4">
@@ -419,9 +492,9 @@
                 </button>
             </div>
 
-            <!-- PHYSICAL RACK CONTAINER -->
+            <!-- PHYSICAL 28-SLOT WOODEN ISTAKA RACK -->
             <div class="w-full max-w-5xl">
-                <!-- Rack Action Bar -->
+                <!-- Rack Action Control Bar -->
                 <div class="flex items-center justify-between mb-2 px-1">
                     <div class="flex items-center space-x-2">
                         <button onclick="sortRack('color')" class="px-2.5 py-1 bg-gray-800 hover:bg-gray-700 text-white text-xs rounded-md border border-gray-700 font-semibold transition flex items-center gap-1 shadow">
@@ -431,7 +504,7 @@
                             <i class="fa-solid fa-arrow-down-1-9 text-amber-400"></i> Sayıya Göre
                         </button>
                         <button onclick="autoFindPairs()" class="px-2.5 py-1 bg-gray-800 hover:bg-gray-700 text-white text-xs rounded-md border border-gray-700 font-semibold transition flex items-center gap-1 shadow">
-                            <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i> Perleri Bul
+                            <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i> Perleri Diz
                         </button>
                     </div>
 
@@ -445,12 +518,16 @@
                     </div>
                 </div>
 
-                <!-- PHYSICAL 28-SLOT ISTAKA RACK -->
-                <div class="istaka-rack p-2.5 shadow-2xl relative">
+                <!-- 2-TIER WOODEN ISTAKA RACK -->
+                <div class="istaka-wooden-rack p-3 shadow-2xl">
                     <!-- Top Slot Row (Slots 0 to 13) -->
-                    <div id="rackRow1" class="flex justify-between items-center mb-1.5 gap-1 min-h-[66px]"></div>
+                    <div class="istaka-row-bevel mb-2">
+                        <div id="rackRow1" class="flex justify-between items-center gap-1 min-h-[66px]"></div>
+                    </div>
                     <!-- Bottom Slot Row (Slots 14 to 27) -->
-                    <div id="rackRow2" class="flex justify-between items-center gap-1 min-h-[66px]"></div>
+                    <div class="istaka-row-bevel">
+                        <div id="rackRow2" class="flex justify-between items-center gap-1 min-h-[66px]"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -474,9 +551,7 @@
                             <th class="py-2.5 px-3 text-right">Toplam</th>
                         </tr>
                     </thead>
-                    <tbody id="scoreboardBody" class="divide-y divide-gray-800">
-                        <!-- Dynamic Rows -->
-                    </tbody>
+                    <tbody id="scoreboardBody" class="divide-y divide-gray-800"></tbody>
                 </table>
             </div>
         </div>
@@ -499,13 +574,23 @@
 
     <script>
         const COLORS = ['kirmizi', 'siyah', 'mavi', 'sari'];
-        
-        // 28 Grid Slots for Istaka
         let rackSlots = new Array(28).fill(null);
-        
+
+        // Room Waiting Seats State
+        let roomLobbyState = {
+            isHost: true,
+            roomCode: 'OKY-1010',
+            seats: [
+                { id: 1, name: 'Masa Sahibi', isBot: false, team: 'A' },
+                { id: 2, name: 'Boş (Bekleniyor)', isBot: true, team: 'B' },
+                { id: 3, name: 'Boş (Bekleniyor)', isBot: true, team: 'A' },
+                { id: 4, name: 'Boş (Bekleniyor)', isBot: true, team: 'B' }
+            ]
+        };
+
         let gameState = {
-            mode: '101', // '101' or 'klasik'
-            teamMode: 'single', // 'single' or 'partner'
+            mode: '101',
+            teamMode: 'single',
             players: [
                 { id: 1, name: 'Oyuncu 1', isBot: false, score: 0, opened101: false },
                 { id: 2, name: 'Ayşe (Bot)', isBot: true, score: 0, opened101: false },
@@ -518,19 +603,17 @@
             okeyTile: null,
             discards: [[], [], [], []],
             playerHands: [[], [], [], []],
-            openedTableMelds: [], // Melds placed on table in 101 mode
+            openedTableMelds: [],
             selectedSlotIndex: null,
             hasDrawnThisTurn: false,
             turnTimer: 30,
             timerInterval: null
         };
 
-        // Web Audio Synthesizer for High-Quality Sound Effects
+        // Web Audio Synthesizer
         const AudioFX = {
             ctx: null,
-            init() {
-                if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-            },
+            init() { if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); },
             playClick() {
                 this.init(); if (!this.ctx) return;
                 const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
@@ -543,8 +626,8 @@
             playTilePlace() {
                 this.init(); if (!this.ctx) return;
                 const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
-                osc.type = 'sine'; osc.frequency.setValueAtTime(200, this.ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(70, this.ctx.currentTime + 0.08);
+                osc.type = 'sine'; osc.frequency.setValueAtTime(220, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(80, this.ctx.currentTime + 0.08);
                 gain.gain.setValueAtTime(0.3, this.ctx.currentTime); gain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 0.08);
                 osc.connect(gain); gain.connect(this.ctx.destination);
                 osc.start(); osc.stop(this.ctx.currentTime + 0.08);
@@ -564,38 +647,105 @@
             AudioFX.playClick();
             const createSec = document.getElementById('createRoomSection');
             const joinSec = document.getElementById('joinRoomSection');
+            const waitingSec = document.getElementById('waitingLobbySection');
             const createBtn = document.getElementById('tabCreateBtn');
             const joinBtn = document.getElementById('tabJoinBtn');
 
+            waitingSec.classList.add('hidden');
+
             if (tab === 'create') {
                 createSec.classList.remove('hidden'); joinSec.classList.add('hidden');
-                createBtn.className = "flex-1 py-2.5 rounded-lg text-sm font-bold bg-amber-600 text-white shadow-md transition";
-                joinBtn.className = "flex-1 py-2.5 rounded-lg text-sm font-bold text-gray-400 hover:text-white transition";
+                createBtn.className = "flex-1 py-2 rounded-lg text-sm font-bold bg-amber-600 text-white shadow-md transition";
+                joinBtn.className = "flex-1 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-white transition";
             } else {
                 createSec.classList.add('hidden'); joinSec.classList.remove('hidden');
-                joinBtn.className = "flex-1 py-2.5 rounded-lg text-sm font-bold bg-amber-600 text-white shadow-md transition";
-                createBtn.className = "flex-1 py-2.5 rounded-lg text-sm font-bold text-gray-400 hover:text-white transition";
+                joinBtn.className = "flex-1 py-2 rounded-lg text-sm font-bold bg-amber-600 text-white shadow-md transition";
+                createBtn.className = "flex-1 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-white transition";
             }
         }
 
-        function openLobby() {
-            document.getElementById('lobbyModal').classList.remove('hidden');
-        }
-
-        function startGameFromLobby() {
+        function createWaitingRoomLobby() {
             AudioFX.playClick();
             const mode = document.querySelector('input[name="gameMode"]:checked').value;
             const teamMode = document.querySelector('input[name="teamMode"]:checked').value;
-            const fillType = document.getElementById('playerFillType').value;
-            const pName = document.getElementById('playerNameInput').value.trim() || 'Oyuncu 1';
+            const hostName = document.getElementById('hostPlayerName').value.trim() || 'Masa Sahibi';
 
             gameState.mode = mode;
             gameState.teamMode = teamMode;
-            gameState.players[0].name = pName;
+            roomLobbyState.isHost = true;
+            roomLobbyState.roomCode = 'OKY-' + Math.floor(1000 + Math.random() * 9000);
+            roomLobbyState.seats[0].name = hostName;
 
-            document.getElementById('displayGameMode').innerText = mode === 'klasik' ? 'KLASİK OKEY' : '101 YÜZBİR OKEY';
-            
-            if (mode === '101') {
+            document.getElementById('createRoomSection').classList.add('hidden');
+            document.getElementById('joinRoomSection').classList.add('hidden');
+            document.getElementById('lobbyTabContainer').classList.add('hidden');
+            document.getElementById('waitingLobbySection').classList.remove('hidden');
+
+            document.getElementById('waitingRoomCodeBadge').innerText = roomLobbyState.roomCode;
+            document.getElementById('seatName1').innerText = hostName + " (Masa Sahibi)";
+
+            renderWaitingRoomSeats();
+        }
+
+        function joinWaitingRoomAction() {
+            AudioFX.playClick();
+            const code = document.getElementById('roomCodeInput').value.trim().toUpperCase();
+            const pName = document.getElementById('joinPlayerName').value.trim() || 'Oyuncu';
+            if (!code) return alert("Lütfen geçerli bir Oda Kodu giriniz!");
+
+            roomLobbyState.isHost = false;
+            roomLobbyState.roomCode = code;
+
+            document.getElementById('createRoomSection').classList.add('hidden');
+            document.getElementById('joinRoomSection').classList.add('hidden');
+            document.getElementById('lobbyTabContainer').classList.add('hidden');
+            document.getElementById('waitingLobbySection').classList.remove('hidden');
+
+            document.getElementById('waitingRoomCodeBadge').innerText = code;
+            document.getElementById('hostControlsFooter').innerHTML = `<div class="text-center text-xs text-amber-400 font-bold animate-pulse">Masa sahibinin oyunu başlatması bekleniyor...</div>`;
+
+            renderWaitingRoomSeats();
+        }
+
+        function toggleSeatBot(seatIndex) {
+            AudioFX.playClick();
+            const seat = roomLobbyState.seats[seatIndex];
+            if (seat.isBot) {
+                seat.name = `Oyuncu ${seatIndex + 1} (Bot)`;
+            } else {
+                seat.name = `Boş (Bekleniyor)`;
+            }
+            renderWaitingRoomSeats();
+        }
+
+        function renderWaitingRoomSeats() {
+            for (let i = 1; i <= 3; i++) {
+                const seat = roomLobbyState.seats[i];
+                const nameEl = document.getElementById(`seatName${i + 1}`);
+                const btnEl = document.getElementById(`seatBtn${i + 1}`);
+
+                if (nameEl) nameEl.innerText = seat.name;
+                if (btnEl && roomLobbyState.isHost) {
+                    btnEl.innerText = seat.isBot ? "Bot Çıkar" : "Bot Ekle";
+                }
+            }
+        }
+
+        function copyRoomLink() {
+            AudioFX.playClick();
+            const text = roomLobbyState.roomCode;
+            navigator.clipboard.writeText(text);
+            alert(`Oda Kodu [${text}] panoya kopyalandı! Arkadaşlarınızla paylaşabilirsiniz.`);
+        }
+
+        function hostStartGameAction() {
+            AudioFX.playClick();
+            document.getElementById('lobbyModal').classList.add('hidden');
+            document.getElementById('roomCodeBadge').innerText = "ODA: #" + roomLobbyState.roomCode;
+
+            document.getElementById('displayGameMode').innerText = gameState.mode === 'klasik' ? 'KLASİK OKEY' : '101 YÜZBİR OKEY';
+
+            if (gameState.mode === '101') {
                 document.getElementById('score101Badge').classList.remove('hidden');
                 document.getElementById('openHand101Btn').classList.remove('hidden');
             } else {
@@ -603,37 +753,29 @@
                 document.getElementById('openHand101Btn').classList.add('hidden');
             }
 
-            if (teamMode === 'partner') {
+            if (gameState.teamMode === 'partner') {
                 document.getElementById('teamBadgeP3').classList.remove('hidden');
             } else {
                 document.getElementById('teamBadgeP3').classList.add('hidden');
+            }
+
+            // Sync Seats into Game Players
+            for (let i = 0; i < 4; i++) {
+                gameState.players[i].name = roomLobbyState.seats[i].name;
+                gameState.players[i].isBot = roomLobbyState.seats[i].isBot;
             }
 
             document.getElementById('nameP2').innerText = gameState.players[1].name;
             document.getElementById('nameP3').innerText = gameState.players[2].name;
             document.getElementById('nameP4').innerText = gameState.players[3].name;
 
-            document.getElementById('lobbyModal').classList.add('hidden');
-            
-            if (fillType === 'online' && window.FirebaseApp.isOnline) {
-                setupOnlineRoom();
-            } else {
-                initNewGameRound();
-            }
-        }
-
-        function joinRoomAction() {
-            const code = document.getElementById('roomCodeInput').value.trim();
-            if (!code) return alert("Lütfen geçerli bir oda kodu giriniz!");
-            document.getElementById('roomCodeBadge').innerText = "ODA: #" + code.toUpperCase();
-            startGameFromLobby();
+            initNewGameRound();
         }
 
         function generateCompleteDeck() {
             let deck = [];
             let tileId = 1;
 
-            // 2 Sets of 1-13 for 4 Colors = 104 Tiles
             for (let set = 0; set < 2; set++) {
                 for (let color of COLORS) {
                     for (let num = 1; num <= 13; num++) {
@@ -642,11 +784,9 @@
                 }
             }
 
-            // 2 Fake Okeys (Sahte Okey)
             deck.push({ id: tileId++, color: 'sahte', number: 0, isFake: true });
             deck.push({ id: tileId++, color: 'sahte', number: 0, isFake: true });
 
-            // Fisher-Yates Shuffle
             for (let i = deck.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [deck[i], deck[j]] = [deck[j], deck[i]];
@@ -661,10 +801,8 @@
             gameState.openedTableMelds = [];
             gameState.hasDrawnThisTurn = false;
 
-            // Select Indicator Tile
             gameState.indicatorTile = gameState.deck.pop();
 
-            // Calculate Okey Tile (Same Color, Number + 1; 13 wraps to 1)
             if (gameState.indicatorTile.isFake) {
                 gameState.okeyTile = { color: 'kirmizi', number: 1 };
             } else {
@@ -672,7 +810,6 @@
                 gameState.okeyTile = { color: gameState.indicatorTile.color, number: nextNum };
             }
 
-            // Deal Tiles (15 to starting player, 14 to remaining players)
             const startingPlayer = Math.floor(Math.random() * 4);
             gameState.currentTurn = startingPlayer;
 
@@ -681,7 +818,6 @@
                 gameState.playerHands[i] = gameState.deck.splice(0, count);
             }
 
-            // Place Player 0's tiles into physical 28-slot Istaka Rack
             rackSlots = new Array(28).fill(null);
             gameState.playerHands[0].forEach((tile, index) => {
                 if (index < 28) rackSlots[index] = tile;
@@ -706,10 +842,8 @@
             let displayVal = tile.number;
             let colorClass = `tile-${tile.color}`;
 
-            // Check if wild Okey
             let isWild = (!tile.isFake && tile.color === gameState.okeyTile.color && tile.number === gameState.okeyTile.number);
-            
-            // Fake Okey behaves visually as Okey tile
+
             if (tile.isFake) {
                 displayVal = gameState.okeyTile.number;
                 colorClass = `tile-${gameState.okeyTile.color}`;
@@ -725,14 +859,10 @@
         }
 
         function renderBoard() {
-            // Render Indicator & Okey Tile
-            document.getElementById('indicatorTileSlot').innerHTML = renderTileHTML(gameState.indicatorTile, 'okey-indicator-glow');
+            document.getElementById('indicatorTileSlot').innerHTML = renderTileHTML(gameState.indicatorTile, 'okey-glow');
             document.getElementById('okeyTileSlot').innerHTML = renderTileHTML({ color: gameState.okeyTile.color, number: gameState.okeyTile.number }, 'border-2 border-amber-400');
-
-            // Render Deck Count
             document.getElementById('deckCountBadge').innerText = gameState.deck.length;
 
-            // Render Discard Piles
             for (let i = 0; i < 4; i++) {
                 const pileEl = document.getElementById(`discardP${i + 1}`);
                 const topDiscard = gameState.discards[i][gameState.discards[i].length - 1];
@@ -741,7 +871,6 @@
                 }
             }
 
-            // Render Table Melds in 101 Mode
             const meldsContainer = document.getElementById('openedHandsTable');
             if (gameState.openedTableMelds.length === 0) {
                 meldsContainer.innerHTML = `<div class="text-[11px] text-gray-500 italic">Henüz masaya açılan el yok</div>`;
@@ -753,10 +882,8 @@
                 `).join('');
             }
 
-            // Check if user can pull left discard
             const takeBtn = document.getElementById('takeDiscardBtn');
-            const leftPlayerIndex = 3;
-            if (gameState.currentTurn === 0 && !gameState.hasDrawnThisTurn && gameState.discards[leftPlayerIndex].length > 0) {
+            if (gameState.currentTurn === 0 && !gameState.hasDrawnThisTurn && gameState.discards[3].length > 0) {
                 takeBtn.classList.remove('hidden');
             } else {
                 takeBtn.classList.add('hidden');
@@ -773,7 +900,7 @@
             for (let i = 0; i < 28; i++) {
                 const tile = rackSlots[i];
                 const isSelected = (gameState.selectedSlotIndex === i);
-                
+
                 const slotHTML = `
                     <div class="istaka-slot ${isSelected ? 'border-amber-500' : ''}" 
                          onclick="onSlotClick(${i})"
@@ -796,14 +923,12 @@
                     gameState.selectedSlotIndex = index;
                 }
             } else if (gameState.selectedSlotIndex === index) {
-                // Double tap on selected tile -> Discard if current player's turn to discard
                 if (gameState.currentTurn === 0 && gameState.hasDrawnThisTurn) {
                     userDiscardTile(index);
                     return;
                 }
                 gameState.selectedSlotIndex = null;
             } else {
-                // Swap or move tile between slots
                 let temp = rackSlots[index];
                 rackSlots[index] = rackSlots[gameState.selectedSlotIndex];
                 rackSlots[gameState.selectedSlotIndex] = temp;
@@ -831,16 +956,12 @@
             let tileDrawn = null;
             if (source === 'deck' && gameState.deck.length > 0) {
                 tileDrawn = gameState.deck.pop();
-            } else if (source === 'discard') {
-                const leftPlayerIndex = 3;
-                if (gameState.discards[leftPlayerIndex].length > 0) {
-                    tileDrawn = gameState.discards[leftPlayerIndex].pop();
-                }
+            } else if (source === 'discard' && gameState.discards[3].length > 0) {
+                tileDrawn = gameState.discards[3].pop();
             }
 
             if (tileDrawn) {
                 AudioFX.playTilePlace();
-                // Find first empty slot in rack
                 let emptyIndex = rackSlots.findIndex(s => s === null);
                 if (emptyIndex !== -1) {
                     rackSlots[emptyIndex] = tileDrawn;
@@ -871,7 +992,7 @@
         function advanceTurn() {
             gameState.currentTurn = (gameState.currentTurn + 1) % 4;
             gameState.hasDrawnThisTurn = false;
-            
+
             renderBoard();
             renderUserRack();
             updateTurnUI();
@@ -886,7 +1007,7 @@
             clearInterval(gameState.timerInterval);
             gameState.turnTimer = 30;
             const timerBadge = document.getElementById('timerBadge');
-            
+
             gameState.timerInterval = setInterval(() => {
                 gameState.turnTimer--;
                 if (timerBadge) timerBadge.innerText = `${gameState.turnTimer}s`;
@@ -894,7 +1015,6 @@
                 if (gameState.turnTimer <= 0) {
                     clearInterval(gameState.timerInterval);
                     if (gameState.currentTurn === 0) {
-                        // Auto draw & discard on timeout
                         if (!gameState.hasDrawnThisTurn) userDrawTile('deck');
                         let filledIndex = rackSlots.findIndex(s => s !== null);
                         if (filledIndex !== -1) userDiscardTile(filledIndex);
@@ -906,8 +1026,8 @@
         function updateTurnUI() {
             const statusEl = document.getElementById('turnStatusText');
             if (gameState.currentTurn === 0) {
-                statusEl.innerHTML = gameState.hasDrawnThisTurn 
-                    ? `<span class="text-amber-400 font-bold animate-pulse">Sıra Sizde: Bir Taş Atın</span> <span id="timerBadge" class="bg-red-900/60 text-red-300 px-1.5 py-0.2 rounded text-[10px] font-mono border border-red-700">30s</span>`
+                statusEl.innerHTML = gameState.hasDrawnThisTurn
+                    ? `<span class="text-amber-400 font-bold animate-pulse">Sıra Sizde: Taş Atın</span> <span id="timerBadge" class="bg-red-900/60 text-red-300 px-1.5 py-0.2 rounded text-[10px] font-mono border border-red-700">30s</span>`
                     : `<span class="text-amber-400 font-bold animate-pulse">Sıra Sizde: Taş Çekin</span> <span id="timerBadge" class="bg-red-900/60 text-red-300 px-1.5 py-0.2 rounded text-[10px] font-mono border border-red-700">30s</span>`;
             } else {
                 statusEl.innerHTML = `<span>${gameState.players[gameState.currentTurn].name} oynuyor...</span> <span id="timerBadge" class="bg-red-900/60 text-red-300 px-1.5 py-0.2 rounded text-[10px] font-mono border border-red-700">30s</span>`;
@@ -921,8 +1041,8 @@
 
             boxes.forEach((box, i) => {
                 if (box) {
-                    if ((i + 1) === gameState.currentTurn) box.classList.add('active-turn-box');
-                    else box.classList.remove('active-turn-box');
+                    if ((i + 1) === gameState.currentTurn) box.classList.add('active-turn-card');
+                    else box.classList.remove('active-turn-card');
                 }
             });
         }
@@ -959,13 +1079,9 @@
         function calculateRackMeldScore() {
             let activeTiles = rackSlots.filter(t => t !== null);
             let totalScore = 0;
-            
-            // Aggregate numerical value for valid runs and sets
             activeTiles.forEach(t => {
-                if (!t.isFake) totalScore += t.number;
-                else totalScore += gameState.okeyTile.number;
+                totalScore += t.isFake ? gameState.okeyTile.number : t.number;
             });
-
             return totalScore;
         }
 
@@ -977,8 +1093,6 @@
             if (score >= 101) {
                 AudioFX.playSuccess();
                 alert(`Tebrikler! Toplam ${score} puanlık perlerinizi masaya açtınız!`);
-                
-                // Add valid run to table
                 let activeTiles = rackSlots.filter(t => t !== null).slice(0, 4);
                 gameState.openedTableMelds.push(activeTiles);
                 renderBoard();
@@ -990,7 +1104,7 @@
         function finishHandAction() {
             AudioFX.playClick();
             if (!gameState.hasDrawnThisTurn && gameState.currentTurn === 0) {
-                alert("Eli bitirmek için önce taş çekip okey taşını discard etmelisiniz!");
+                alert("Eli bitirmek için önce taş çekip okey taşını atmalısınız!");
                 return;
             }
 
@@ -1005,7 +1119,6 @@
             const botIndex = gameState.currentTurn;
             const botHand = gameState.playerHands[botIndex];
 
-            // Bot draws tile
             if (gameState.deck.length > 0) {
                 botHand.push(gameState.deck.pop());
             }
@@ -1023,40 +1136,6 @@
                 AudioFX.playTilePlace();
                 advanceTurn();
             }, 800);
-        }
-
-        function setupOnlineRoom() {
-            if (!window.FirebaseApp.isOnline || !window.FirebaseApp.db) return;
-
-            const roomCode = document.getElementById('roomCodeBadge').innerText.replace('ODA: #', '');
-            const appId = window.FirebaseApp.appId;
-            const roomRef = doc(window.FirebaseApp.db, 'artifacts', appId, 'public', 'data', 'rooms', roomCode);
-
-            window.FirebaseApp.roomRef = roomRef;
-
-            // Initialize or listen to Firebase snapshot
-            window.FirebaseApp.roomUnsubscribe = onSnapshot(roomRef, (snapshot) => {
-                if (snapshot.exists()) {
-                    const data = snapshot.data();
-                    if (data.gameState) {
-                        gameState.currentTurn = data.gameState.currentTurn;
-                        gameState.deck = data.gameState.deck || [];
-                        renderBoard();
-                    }
-                } else {
-                    setDoc(roomRef, {
-                        createdAt: Date.now(),
-                        gameState: {
-                            currentTurn: gameState.currentTurn,
-                            deckCount: gameState.deck.length
-                        }
-                    });
-                }
-            }, (error) => {
-                console.warn("Firestore snapshot error:", error);
-            });
-
-            initNewGameRound();
         }
 
         function toggleScoreboard() {
@@ -1098,7 +1177,10 @@
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
 
-        // Window Init
+        function openLobby() {
+            document.getElementById('lobbyModal').classList.remove('hidden');
+        }
+
         window.onload = function() {
             openLobby();
         };
